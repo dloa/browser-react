@@ -1,0 +1,416 @@
+@font-face {
+  font-family: 'mediaicns';
+  src: url('../icons/media.eot?53903517');
+  src: url('../icons/media.eot?53903517#iefix') format('embedded-opentype'),
+       url('../icons/media.woff2?53903517') format('woff2'),
+       url('../icons/media.woff?53903517') format('woff'),
+       url('../icons/media.ttf?53903517') format('truetype'),
+       url('../icons/media.svg?53903517#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+#audio-player, #native-player {
+	max-width: 100%;
+	margin-bottom: 15px;
+}
+.playbar {
+    width: 100%;
+    min-height: 50px;
+	box-sizing: border-box;
+}
+
+#playbar-container {
+    position: relative;
+}
+.jp-interface {
+	margin-top: 30px;
+}
+.playbar-shadow {
+    border-radius: 20px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+.playbar-shadow.hide {
+    transform: translate(0%, -5000%)
+}
+.playbar-shadow h2 {
+    text-align: center;
+}
+.playbar .jp-play, .playbar .jp-stop, .playbar .jp-full-screen {
+    float: left;
+    height: 40px;
+    width: 29px;
+    font-family: 'mediaicns';
+    border: none;
+    font-size: 34px;
+    position: relative;
+    top: -19px;
+    background-color: transparent;
+	margin: 0 12px 0 0;
+	padding: 0;
+}
+
+.playbar .jp-play:before {
+    content: '\e800'
+}
+
+button.jp-play:focus, .jp-volume-controls button:focus {
+	outline: 0;
+}
+.playback .jp-stop {
+    display: none;
+}
+
+.playbar .jp-stop:before{
+    content: '\e801';
+}
+
+.playbar.jp-state-playing .jp-play:before{
+    content: '\e802';
+}
+
+.playbar .jp-full-screen:before {
+	content: '\f0b2';
+}
+.playbar .jp-full-screen {
+	cursor: pointer;
+	line-height: 35px;
+	font-size: 24px;
+	top: -15px;
+	left: 7px;
+}
+
+.playbar .jp-stop {
+    display: none !important; /* no need for stop atm */
+}
+
+ .playbar .jp-current-time {
+    position: relative;
+    top: -9px;
+    z-index: -1;
+    float: left;
+ }
+
+ .playbar .jp-progress {
+    height: 3px;
+    float: left;
+    margin: 1px 12px;
+    width: calc( 100% - 52px - 40px - 24px - 40px - 145px);
+    background-color: lightgrey;
+    position: relative;
+ }
+
+.playbar .jp-seek-bar {
+    height: 40px;
+    margin-top: -20px;
+    padding-top: 20px;
+}
+
+.playbar .jp-play-bar {
+    background-color: #868686;
+    height: 3px;
+}
+
+.playbar .jp-play-button {
+    content: "";
+    width: 10px;
+    top: -4px;
+    position: relative;
+    border-radius: 100%;
+    background-color: #868686;
+    height: 10px;
+    float: right;
+}
+
+.playbar .scrobble-bar p {
+    line-height: 0px;
+    /* hack to make it sit higher -- its 2:12 am ill fix this up later */
+}
+
+.playbar .jp-duration {
+    float: left;
+    line-height: 50px;
+    height: 100%;
+    position: relative;
+    top: -23px;
+}
+
+.jp-volume-controls {
+    width: 97px;
+    position: relative;
+    float: left;
+    margin-left: 12px;
+    top: -27px;
+}
+
+.jp-volume-bar {
+    background-color: #aaa;
+    position: absolute;
+    height: 4px;
+    padding: 1px;
+    overflow: hidden;
+    cursor: pointer;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    margin-top: 33px;
+}
+
+.jp-volume-bar-value {
+    background-color: #222;
+    height: 100%;
+}
+
+.jp-volume-controls button {
+	position: absolute;
+	display: block;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+	width: 15px;
+	height: 15px;
+	border: 0 none;
+	cursor: pointer;
+    font-family: 'mediaicns';
+    background-color: transparent;
+    text-align: left;
+}
+
+.jp-volume-controls .jp-mute, .jp-volume-controls .jp-unmute {
+	left: 0px;
+	top: 14px;
+}
+
+.jp-volume-controls .jp-mute:before {
+    content: '\e804';
+}
+
+.jp-volume-controls .jp-volume-max {
+	right: 0;
+	top: 14px;
+}
+
+.jp-volume-controls .jp-volume-max:before {
+    content: '\e805';
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #fff !important;
+    padding-top: 44px;
+    min-height: calc(100% - 44px);
+    box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.75);
+    -webkit-box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
+}
+
+.media-info h1, .media-info h2, .media-info h3 {
+    text-align: left;
+    line-height: 1.6;
+}
+
+.ri-publisher {
+    display: none
+}
+
+.ri-btc-address {
+    display: none
+}
+
+.ri-runtime {
+    display: none
+}
+
+.ri-track-count {
+    display: none
+}
+
+.ri-xfile-container {
+    display: none
+}
+
+.release-info {
+    font-size: 1em;
+}
+
+.price {
+    margin-top: 7px;
+}
+
+.playlist-table thead {
+    color: #7c7c7c !important;
+}
+
+.pwyw-item .button-svg {
+    cursor: pointer
+}
+
+.tipbox {
+    display: none
+}
+    
+.jp-details {
+    position: relative;
+    top: -15px;
+    z-index: -1;
+    width: 100%;
+    clear: both;
+    font-weight: bold;
+    text-align: center;
+}
+
+.playbar-shadow h2 {
+    text-align: center
+}
+
+.pwwy-stuff {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    z-index: 1050;
+    width: 100%;
+}
+
+.pwyw-item.active:before {
+    display: none !important;
+}
+
+.pwyw-container {
+    background-color: #f7f6f5;
+}
+
+.pwyw-overlay {
+    display: none;
+    position:fixed;
+    height: 100%;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:rgba(230, 230, 230, 0.85);
+    background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC) repeat scroll transparent\9; /* ie fallback png background image */
+    z-index:1000;
+}
+
+.pwyw-container {
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
+    -moz-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
+    box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
+}
+
+.pwyw-close {
+    font-family: 'mediaicns';
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    font-size: 16px;
+    cursor: pointer;
+    display: none
+}
+
+.pwyw-close:before {
+    content: '\e803';
+}
+
+.pwyw-suggest {
+    margin-bottom: 13px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.pwyw-pin-pretext {
+    margin-bottom: 5px;
+}
+
+.pwyw-payinfo {
+    display: block;
+    -webkit-justify-content: inherit;
+    justify-content: inherit;
+    -webkit-flex-direction: inherit;
+    flex-direction: inherit;
+}
+.pwyw-paybox {
+    display: none;
+}
+.pwyw-paybox input {
+    width: 45px;
+    text-align: center;
+    padding: 0 10px;
+}
+.payment-select-buttons a, .payment-select-buttons iframe {
+    margin: 1em auto;
+}
+.payment-select-buttons a {
+    display: block;
+    clear: both;
+    border-radius: 5px;
+    padding: 0.7em 1.4em;
+    line-height: 1.3;
+    background-color: #116FDE;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #116FDE;
+    transition: 0.15s ease all;
+    text-shadow: none;
+    font-weight: 400;
+    box-shadow: none;
+    font-size: 18px;
+    font-family: 'helvetica neue';
+}
+.pwyw-footer {
+    text-align: center;
+}
+.pwyw-btc-address {
+    font-size: .75rem !important;
+}
+
+@media only screen and (min-width: 338px) {
+    .pwyw-btc-address {
+        font-size: .8rem !important;
+    }
+}
+@media only screen and (min-width: 373px) {
+    .pwyw-btc-address {
+        font-size: .9rem !important;
+    }
+}
+
+@media only screen and (min-width: 410px) {
+    .pwyw-btc-address {
+        font-size: 1rem !important;
+    }
+}
+.pwyw-pining-info {
+    font-size: 30px
+}
+
+.pwyw-pining-suggest {
+    font-size: 30px
+}
+
+.pwyw-qrcode {
+    margin: 10px 5px;
+}
+
+.pwyw-somespace {
+    height: 10px
+}
+
+.pwyw-pining-suggestion {
+    text-align: center
+}
+
+.pwyw-pining-error {
+    margin-bottom: 13px;
+    display: none
+}
+
+.media-cover img {
+    display: block;
+    width: 100%;
+}
