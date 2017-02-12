@@ -9,11 +9,11 @@ import NotFoundPage from './components/NotFoundPage';
 const routes = (
 	<Route path="/" component={Layout}>
 		<IndexRoute component={BrowsePage}/>
- 		<Route path="#/:id" component={ArtifactPage}/>
+		<Route path="media/:hash" component={ArtifactPage}/>
 		<Route path="*" component={NotFoundPage}/>
 	</Route>
 );
 
 export default routes;
 
-//<Route path="athlete/:id" component={AthletePage}/>
+//<Route path="#/:id" component={ArtifactPage}/>
