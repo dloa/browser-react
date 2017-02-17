@@ -32,7 +32,7 @@ function makeHistory(stateObj, newTitle) {
 			if (stateObj.currentView == 'media') {
 				newUrl = document.location.origin + '/media';
 			} else {
-				newUrl = newUrl + stateObj.currentView;
+				newUrl = document.location.origin + '/' + stateObj.currentView;
 			}
 			console.log("3" + newUrl);
 		}

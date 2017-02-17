@@ -64,10 +64,10 @@ function loadArtifactView(objMeta) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
 	// GET MEDIA ID FROM LOCATION
 	} else if (!objMeta) {
-		if (location.pathname.slice(1).split('/')[2]) {
-			mediaID = location.pathname.slice(1).split('/')[2];
-		} else {
+		if (location.pathname.slice(1).split('/')[1]) {
 			mediaID = location.pathname.slice(1).split('/')[1];
+		} else {
+			mediaID = location.pathname.slice(1).split('/')[0];
 		}
 	} else {
 		mediaID = objMeta;
@@ -75,6 +75,8 @@ function loadArtifactView(objMeta) {
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 	console.info(thisMediaData);
+	if (!thisMediaData)
+		return;
 	mediaID = thisMediaData[0]['txid'];
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];

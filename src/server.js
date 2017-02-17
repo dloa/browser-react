@@ -55,7 +55,7 @@ app.get('*', function(req, res) {
 			metaseo = '<meta name="description" content="this is the description" />';
 
 			// render the index template with the embedded React markup
-			return res.render('index', { metaseo: '', markup: markup, path: './' });
+			return res.render('index', { metaseo: '', markup: markup, path: 'http://localhost:3000/' });
 		}
 	});
 });

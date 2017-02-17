@@ -23,14 +23,27 @@ function router (event, goUrl) {
     // Current URL
     var url = location.pathname || '/';
 	var paths = url.slice(1).split('/');
+	console.log(paths);
 	
 	var module = paths[0] ? paths[0] : '/';
 
 	if (!module)
 		module = 'front';
 
+	console.log(module);
+
     // Get route by url:
     var route = routes[module];
+
+    if (!route){
+    	var route = routes['/' + module];
+    	if (!route){
+    		console.log(location.pathname);
+	    	route = routes['/media'];
+    	}
+
+    }
+
     // Route the URL
     if ( (route) && (route.controller) ) {
     	currentView = route.templateId;
@@ -43,7 +56,7 @@ function router (event, goUrl) {
 			if (!paths[2]) {
 				filterMediaByType();
 			} else if (paths[2] == 'type') {
-				var parseTypes = location.hash.split('type/')[1].split('-');
+				var parseTypes = location.pathname.split('type/')[1].split('-');
 				console.info(parseTypes);
 				var filterTypes = [];
 				for (var i = 0; i < parseTypes.length; i++) {
@@ -86,8 +99,8 @@ function router (event, goUrl) {
 						var searchOn = paths[3];
 					}
 					var searchResults = (searchOn) ? (searchAPI(route.templateId, searchOn, searchTerm)) : (searchAPI(route.templateId, '*', searchTerm));
-					if (location.hash.indexOf('types') != -1) {
-						var parseTypes = location.hash.split('types=')[1].split('-');
+					if (location.pathname.indexOf('types') != -1) {
+						var parseTypes = location.pathname.split('types=')[1].split('-');
 						for (var i = 0; i < parseTypes.length; i++) {
 							filterTypes.push(parseTypes[i]);
 						}
@@ -115,7 +128,7 @@ function router (event, goUrl) {
 					} else {
 						console.info(paths);
 						if ( (paths[2] == 'type') && (paths[3]) ) {
-							var parseTypes = location.hash.split('type/')[1];
+							var parseTypes = location.pathname.split('type/')[1];
 							var parseTypeLen = parseTypes.split('-');						
 							if (parseTypeLen.length > 1) {
 								var searchForStr = '';
@@ -191,7 +204,8 @@ function router (event, goUrl) {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
     	console.info(paths[1]);
     	if (!paths[1]) {
-			loadArtifactView(location.hash.slice(1));
+			loadArtifactView(location.pathname);
+			return;
     	}
     	if (paths[1].length == 34) {
 //			var searchResults = searchAPI('publisher', 'address', paths[1]);
