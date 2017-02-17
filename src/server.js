@@ -46,15 +46,16 @@ app.get('*', function(req, res) {
 
 		var urlHash = req.params[0].replace('/media/', '');
 		if (urlHash.length == 64){
+			console.log(urlHash);
 			LDD.getArtifact(urlHash, function(data){
 				metaseo = '<meta property="og:title" content="' + data[0]['media-data']['alexandria-media'].info.title + '" /><title>' + data[0]['media-data']['alexandria-media'].info.title + '</title>';
-				return res.render('index', { metaseo: metaseo, markup: markup });
+				return res.render('index', { metaseo: metaseo, markup: markup, path: '../' });
 			});
 		} else {			
 			metaseo = '<meta name="description" content="this is the description" />';
 
 			// render the index template with the embedded React markup
-			return res.render('index', { metaseo: '', markup: markup });
+			return res.render('index', { metaseo: '', markup: markup, path: './' });
 		}
 	});
 });

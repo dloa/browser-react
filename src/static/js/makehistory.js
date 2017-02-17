@@ -13,13 +13,15 @@ function makeHistory(stateObj, newTitle) {
 	}
 	$('#viewlabel').children().hide();
 	console.log('Make History!');
-	var newUrl = (stateObj.currentView != 'front') ? (document.location.origin + document.location.pathname+'#') : (document.location.origin + document.location.pathname);
+	var newUrl = document.location.origin + document.location.pathname ? document.location.pathname : '/';
+	console.log("1" + newUrl);
 	var newBreadcrumbs = '';
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
 		if (stateObj.module) {
 			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
 			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
-			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + '/' + stateObj.module);
+			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + stateObj.module);
+			console.log("2" + newUrl);
 		}
 		if (!stateObj.subView) {
 			if (stateObj.currentView == 'media') {
@@ -27,7 +29,12 @@ function makeHistory(stateObj, newTitle) {
 			} else if (stateObj.currentView == 'search') {
 				newBreadcrumbs = (stateObj.searchOn) ? (newBreadcrumbs + ' / <a onclick="searchByField(&apos;media&apos;, &apos;*&apos;,&apos;'+stateObj.searchTerm+'&apos;);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>') : (newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>');
 			}
-			newUrl = newUrl + '/' + stateObj.currentView;
+			if (stateObj.currentView == 'media') {
+				newUrl = document.location.origin + '/media';
+			} else {
+				newUrl = newUrl + stateObj.currentView;
+			}
+			console.log("3" + newUrl);
 		}
 	}
 	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes[0]) && (stateObj.mediaTypes.length > 0) ) {
@@ -40,6 +47,7 @@ function makeHistory(stateObj, newTitle) {
 		}
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
 		newUrl = newUrl + '/' + urlString;
+		console.log("4" + newUrl);
 	}
 	if (stateObj.searchTerm) {
 		newBreadcrumbs = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / <span id="breadcrumbs-searchOn">' + stateObj.searchOn + '</span> / ' + stateObj.searchTerm);
@@ -50,7 +58,10 @@ function makeHistory(stateObj, newTitle) {
 		} else {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="getAllPublishers()" class="currentView-breadcrumb">Publishers</a> / ' + stateObj.subView;
 		}
-		newUrl = newUrl + '/' + stateObj.subView;
+		if (!newUrl.includes(stateObj.subView)){
+			newUrl = newUrl + '/' + stateObj.subView;
+			console.log("5" + newUrl);
+		}
 	} else if (stateObj.currentView.slice(0,3) == 'add') {		
 		newBreadcrumbArray = stateObj.currentView.split('-');
 		var breadString = '';
@@ -58,11 +69,12 @@ function makeHistory(stateObj, newTitle) {
 			breadString = (breadString == '') ? (newBreadcrumbArray[i].charAt(0).toUpperCase() + newBreadcrumbArray[i].slice(1)) : (breadString + ' ' + newBreadcrumbArray[i].charAt(0).toUpperCase() + newBreadcrumbArray[i].slice(1))
 		}
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
-		newUrl = newUrl + '/' + stateObj.currentView;		
+		newUrl = newUrl + '/' + stateObj.currentView;
+		console.log("6" + newUrl);		
 	}
 	if ( (newBreadcrumbs == '') && (stateObj.currentView != 'front') ) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
-		
+		console.log(newBreadcrumbs);
 	}
 	if (!isEmbed) {
 		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
@@ -70,5 +82,6 @@ function makeHistory(stateObj, newTitle) {
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
 	document.title = newTitle;
+	console.log("7" + newUrl);
 	history.pushState(stateObj, newTitle, newUrl);
 }

@@ -64,10 +64,10 @@ function loadArtifactView(objMeta) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
 	// GET MEDIA ID FROM LOCATION
 	} else if (!objMeta) {
-		if (location.hash.slice(1).split('/')[2]) {
-			mediaID = location.hash.slice(1).split('/')[2];
+		if (location.pathname.slice(1).split('/')[2]) {
+			mediaID = location.pathname.slice(1).split('/')[2];
 		} else {
-			mediaID = location.hash.slice(1).split('/')[1];
+			mediaID = location.pathname.slice(1).split('/')[1];
 		}
 	} else {
 		mediaID = objMeta;
@@ -227,6 +227,7 @@ function loadArtifactView(objMeta) {
 		publisherId: publisherID
 	}
 	// MAKE HISTORY ARTIFACT VIEW
+	console.log('ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 

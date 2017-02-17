@@ -435,9 +435,9 @@ function goToLocation() {
 	if (goLocation.split('#').length > 1) {
 		goLocation = goLocation.split('#')[1];
 	} else if (goLocation.slice(0,1) != '/') {
-		goLocation = '/'+goLocation;
+		goLocation = goLocation;
 	}
-	var newUrl = location.href.slice(0,location.hash.length*-1) + '#' + goLocation;
+	var newUrl = location.href.slice(0,location.hash.length*-1) + goLocation;
 	document.getElementById('go-to-input').value = '';
 	router(event, newUrl);
 }

@@ -185,15 +185,12 @@ function populateSearchResults(results, module) {
 				if(mediaInfo['extra-info']['artist']){
 					mediaArtist = mediaInfo['extra-info']['artist'];
 				}
-/* LOAD ARTIFACT PREVIEW IMAGE - NOT IMPLEMENTED BECAUSE IT FORCED DOWNLOAD OF ~ 100 MB
-	** Lazyload images
+				/* LOAD ARTIFACT PREVIEW IMAGE - NOT IMPLEMENTED BECAUSE IT FORCED DOWNLOAD OF ~ 100 MB
 				if (mediaInfo['extra-info']['posterFrame']) {
 					mediaThumb = '<img src="'+IPFSHost+'/ipfs/'+mediaHash +'/'+mediaInfo['extra-info']['posterFrame']+'" />';
 				} else if (mediaInfo['extra-info']['preview']) {
 					mediaThumb = '<img src="'+IPFSHost+'/ipfs/'+mediaHash +'/'+mediaInfo['extra-info']['preview']+'" />';
-				}
-
-*/
+				}*/
 			}
 			if ( (mediaRuntime != 0) && (mediaRuntime != '00:00:undefined') ) {
 				mediaRuntime = ' &bull; '+mediaRuntime.split('.')[0];

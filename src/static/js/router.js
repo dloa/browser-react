@@ -18,17 +18,17 @@ var el = null;
 
 function router (event, goUrl) {
 	console.log(isEmbed);
-    // Current route url (getting rid of '#' in hash as well):
-    var url = location.hash.slice(1) || '/';
-  	if (goUrl) {
-		url = goUrl.split('#')[1];
-  	}
-	var paths = url.split('/');
-	if (paths[1] != '') {
-		var module = '/'+paths[1];
-	} else {
-		var module = url;
-	}
+	console.log(location);
+    
+    // Current URL
+    var url = location.pathname || '/';
+	var paths = url.slice(1).split('/');
+	
+	var module = paths[0] ? paths[0] : '/';
+
+	if (!module)
+		module = 'front';
+
     // Get route by url:
     var route = routes[module];
     // Route the URL
@@ -224,8 +224,8 @@ if ( (window.location.pathname.split('/')[window.location.pathname.split('/').le
 	isEmbed = true;
 } else {
 	// Listen on hash change:
-	window.addEventListener('hashchange', router);  
+	window.addEventListener('onpopstate', router);  
 
 	// Listen on page load:
-		window.addEventListener('load', router);
+	window.addEventListener('load', router);
 }
