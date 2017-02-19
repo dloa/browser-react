@@ -16,7 +16,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // define the folder that will be used for static assets
-app.use(Express.static(path.join(__dirname, 'static')));
+app.use('/static', Express.static(path.join(__dirname, 'static')));
 
 // universal routing and rendering
 app.get('*', function(req, res) {
