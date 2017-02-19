@@ -140,7 +140,7 @@ function loadPublisherView(objMeta) {
 			var sugCost = '';
 			if (mediaInfo['extra-info']['files']) {
 				if (mediaInfo['extra-info']['files'][0]['sugPlay']) {
-					hasCost = '<object data="svg/usd_icon_greencircle.svg" type="image/svg+xml"></object>';
+					hasCost = '<object data="/svg/usd_icon_greencircle.svg" type="image/svg+xml"></object>';
 					sugCost = mediaInfo['extra-info']['files'][0]['sugPlay'];
 				}
 				if (mediaType === 'music') {

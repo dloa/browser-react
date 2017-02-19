@@ -45,21 +45,35 @@ app.get('*', function(req, res) {
 
 		var metaseo;
 
-		var urlHash = req.params[0].replace('/media/', '');
-		if ((urlHash.length == 6 || urlHash.length == 64) && req.params[0].includes("media")){
+		var splits = req.params[0].split('/');
+		var urlHash = splits[splits.length-1];
+		if ((urlHash.length == 6 || urlHash.length == 64) && urlHash.split('.').length == 1){
 			console.log(urlHash);
 			LDD.getArtifact(urlHash, function(data){
+				if (!data[0]){
+					return res.render('index', { metaseo: '', markup: markup });
+				}
 				var artifact = data[0]['media-data']['alexandria-media'];
 
 				metaseo = seo.generateTags(data[0], 'http://' + req.headers.host + req.url, req.headers.host);
 
-				return res.render('index', { metaseo: metaseo, markup: markup, path: '../' });
+				return res.render('index', { metaseo: metaseo, markup: markup });
+			});
+		} else if (req.params[0].includes('/player/')){
+			urlHash = req.params[0].replace('/player/', '');
+			console.log("Player: " + urlHash);
+			LDD.getArtifact(urlHash, function(data){
+				var artifact = data[0]['media-data']['alexandria-media'];
+
+				var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> .video { width:100%; height:auto; }</style><div class="video"><video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video></div></body></html>';
+				
+				return res.send(container);
 			});
 		} else {			
 			metaseo = '';
 
 			// render the index template with the embedded React markup
-			return res.render('index', { metaseo: '', markup: markup, path: './' });
+			return res.render('index', { metaseo: '', markup: markup });
 		}
 	});
 });

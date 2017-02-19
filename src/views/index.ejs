@@ -19,16 +19,16 @@
     </script>
 
     <!--	    <script src="js/vendor/jquery-3.1.0.min.js"></script> -->
-    <script src="<%- path -%>js/vendor/jquery-2.1.1.min.js"></script>
-    <script src="<%- path -%>vendor/moment/min/moment.min.js"></script>
-    <link rel="stylesheet" href="<%- path -%>css/fonts.css" />
-    <link rel="stylesheet" href="<%- path -%>css/normalize.min.css" />
-    <link rel="stylesheet" href="<%- path -%>css/alexandria.css" />
-    <link rel="stylesheet" href="<%- path -%>css/alexandria-icons.css" />
-    <link rel="stylesheet" href="<%- path -%>css/media.css" />
-    <link rel="stylesheet" href="<%- path -%>css/media-play.css" />
+    <script src="/js/vendor/jquery-2.1.1.min.js"></script>
+    <script src="/vendor/moment/min/moment.min.js"></script>
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/normalize.min.css" />
+    <link rel="stylesheet" href="/css/alexandria.css" />
+    <link rel="stylesheet" href="/css/alexandria-icons.css" />
+    <link rel="stylesheet" href="/css/media.css" />
+    <link rel="stylesheet" href="/css/media-play.css" />
     <noscript>
-        <link rel="stylesheet" href="<%- path -%>css/noscript.css" />
+        <link rel="stylesheet" href="/css/noscript.css" />
     </noscript>
     <!-- HACK: xaiki
 		<script type="text/javascript">
@@ -80,7 +80,7 @@
                         <li>
                             <a onclick="selectSearchMediaType(this)" value="movie">
                                 <div class="imgwrap">
-                                    <!-- <object data="svg/movie-icon.svg" type="image/svg+xml"></object> -->
+                                    <!-- <object data="/svg/movie-icon.svg" type="image/svg+xml"></object> -->
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="94px" height="94px" viewBox="0 0 94 94" version="1.1" class="replaced-svg">
                                         <title>Movie icon</title>
                                         <g id="g-search-movies-icon-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" type="MSPage">
@@ -1350,13 +1350,13 @@
                         <div class="buybox">
                             <ul class="pwyw-list">
                                 <li class="pwyw-item pwyw-action-play">
-                                    <img class="button-svg" src="svg/paywall-play.svg" />
+                                    <img class="button-svg" src="/svg/paywall-play.svg" />
                                     <span class="price">
 				                           $<span class="pwyw-price-play">play-price</span> to Play
                                     </span>
                                 </li>
                                 <li class="pwyw-item pwyw-action-download">
-                                    <img class="button-svg" src="svg/paywall-download.svg" />
+                                    <img class="button-svg" src="/svg/paywall-download.svg" />
                                     <span class="price">
 				                           $<span class="pwyw-price-download">dl-price</span> to Buy</span>
                                 </li>
@@ -1415,7 +1415,7 @@
                         </div>
                     </div>
                     <div class="media-cover">
-                        <img src="<%- path -%>img/cover_placeholder.jpg" />
+                        <img src="/img/cover_placeholder.jpg" />
                     </div>
                 </div>
                 <div class="bottom">
@@ -1900,38 +1900,38 @@
 
     <div id="loaded"></div>
 
-    <script src="<%- path -%>vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
     <!--	<script src="vendor/spin.js/spin.js"></script> -->
-    <script src="<%- path -%>vendor/mousetrap/mousetrap.min.js"></script>
+    <script src="/vendor/mousetrap/mousetrap.min.js"></script>
 
     <!--	these are not ported to bower yet -->
 
-    <script src="<%- path -%>js/vendor/jquery.xdomainajax.js"></script>
-    <script src="<%- path -%>js/vendor/qrcode.min.js"></script>
-    <script src="<%- path -%>js/vendor/webtoolkit.md5.js"></script>
+    <script src="/js/vendor/jquery.xdomainajax.js"></script>
+    <script src="/js/vendor/qrcode.min.js"></script>
+    <script src="/js/vendor/webtoolkit.md5.js"></script>
     <!--	<script src="js/vendor/upclick-min.js"></script> -->
     <!--	<script src="http://connect.soundcloud.com/sdk.js"></script> -->
 
     <!-- 	App Initialization 	-->
     <!--	<script src="js/vendor/jquery.jsonrpcclient.js"></script> -->
-    <script src="<%- path -%>app.js"></script>
-    <script src="<%- path -%>vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
-    <script src="<%- path -%>js/router.js"></script>
-    <script src="<%- path -%>js/search.js"></script>
-    <script src="<%- path -%>js/svg-icons.js"></script>
-    <script src="<%- path -%>js/searchbox.js"></script>
-    <script src="<%- path -%>js/results.js"></script>
-    <script src="<%- path -%>js/cryptorates.js"></script>
-    <script src="<%- path -%>js/publishers.js"></script>
-    <script src="<%- path -%>js/main.js"></script>
-    <script src="<%- path -%>js/coinbase.js"></script>
-    <script src="<%- path -%>js/media.js"></script>
-    <script src="<%- path -%>js/media-alpha.js"></script>
-    <script src="<%- path -%>js/makehistory.js"></script>
-    <script src="<%- path -%>js/wallet-flovault.js"></script>
-    <script src="<%- path -%>js/tips.js"></script>
-    <script src="<%- path -%>js/alexandria-contact.js"></script>
-    <script src="<%- path -%>js/bundle.js"></script>
+    <script src="/app.js"></script>
+    <script src="/vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
+    <script src="/js/router.js"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/svg-icons.js"></script>
+    <script src="/js/searchbox.js"></script>
+    <script src="/js/results.js"></script>
+    <script src="/js/cryptorates.js"></script>
+    <script src="/js/publishers.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/coinbase.js"></script>
+    <script src="/js/media.js"></script>
+    <script src="/js/media-alpha.js"></script>
+    <script src="/js/makehistory.js"></script>
+    <script src="/js/wallet-flovault.js"></script>
+    <script src="/js/tips.js"></script>
+    <script src="/js/alexandria-contact.js"></script>
+    <script src="/js/bundle.js"></script>
     <!--	<script src="streamer.js"></script> -->
 
 </body>

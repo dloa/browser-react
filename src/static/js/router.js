@@ -194,7 +194,12 @@ function router (event, goUrl) {
 			}
 			stateObj.searchTerm = (paths[2]) ? (paths[2].toString().replace(/-/g, ' ').split('?')[0]) : ('');
 			$('#search-main').val(paths[2].toString().replace(/-/g, ' '));
-    		fullSearch(stateObj.searchTerm);
+
+			if(paths.length == 4){
+				loadArtifactView2();
+			} else {
+				fullSearch(stateObj.searchTerm);
+			}
     	} else if (route.templateId == 'about') {
     		loadAboutView();
     	} else if (route.templateId == 'wallet') {
