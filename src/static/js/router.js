@@ -24,6 +24,16 @@ function router (event, goUrl) {
     var url = location.pathname || '/';
 	var paths = url.split('/');
 	console.log(paths);
+
+	var removeInd = -1;
+	for (var i = 0; i < paths.length; i++){
+		if (paths[i] == "dev-browser")
+			removeInd = i;
+	}
+
+	if (removeInd != -1){
+		paths.splice(removeInd, 1);
+	}
 	
 	var module = paths[1] ? paths[1] : '/';
 
