@@ -76,7 +76,12 @@ function makeHistory(stateObj, newTitle) {
 
 	if (stateObj.home){
 		newBreadcrumbs = '/';
-		newUrl = '/media';
+
+		if (document.location.origin == 'https://alexandria.io')
+			newUrl = '/dev-browser/media';
+		else
+			newUrl = '/media';
+		
 		newTitle = "Alexandria"
 	}
 	if ( (newBreadcrumbs == '') && (stateObj.currentView != 'front') ) {
