@@ -38,7 +38,8 @@ function filterMediaByType(obj, resetSearch) {
 		$('#browse-media .module-links a.active').removeClass('active');
 		var stateObj = {
 			currentView: 'media',
-			searchResults: false
+			searchResults: filteredMedia,
+			home: true
 		}
 		makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 		populateSearchResults(filteredMedia, 'media');

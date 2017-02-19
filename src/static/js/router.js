@@ -125,6 +125,12 @@ function router (event, goUrl) {
 					var searchOn = paths[2].replace("-","_");
 					if (searchOn.length == 6 || searchOn.length == 64) {
 						loadArtifactView2();
+						var stateObj = {
+							currentView: 'media',
+							searchResults: false,
+							isFront: true							
+						}
+						makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 					} else {
 						console.info(paths);
 						if ( (paths[2] == 'type') && (paths[3]) ) {

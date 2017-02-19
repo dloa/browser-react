@@ -15,6 +15,7 @@ function makeHistory(stateObj, newTitle) {
 	console.log('Make History!');
 	var newUrl = document.location.origin + document.location.pathname ? document.location.pathname : '';
 	console.log("1" + newUrl);
+	console.log(stateObj);
 	var newBreadcrumbs = '';
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
 		if (stateObj.module) {
@@ -28,10 +29,10 @@ function makeHistory(stateObj, newTitle) {
 				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>';
 			} else if (stateObj.currentView == 'search') {
 				newBreadcrumbs = (stateObj.searchOn) ? (newBreadcrumbs + ' / <a onclick="searchByField(&apos;media&apos;, &apos;*&apos;,&apos;'+stateObj.searchTerm+'&apos;);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>') : (newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>');
-			}
-			if (stateObj.currentView == 'media') {
-				newUrl = newUrl + 'media';
 			} else {
+				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>';
+			}
+			if (!newUrl.includes(stateObj.currentView)) {
 				newUrl = newUrl + stateObj.currentView;
 			}
 			console.log("3" + newUrl);
@@ -71,6 +72,12 @@ function makeHistory(stateObj, newTitle) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
 		newUrl = newUrl + '/' + stateObj.currentView;
 		console.log("6" + newUrl);		
+	}
+
+	if (stateObj.home){
+		newBreadcrumbs = '/';
+		newUrl = '/media';
+		newTitle = "Alexandria"
 	}
 	if ( (newBreadcrumbs == '') && (stateObj.currentView != 'front') ) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
