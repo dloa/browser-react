@@ -6,7 +6,8 @@ import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import routes from './routes';
 import NotFoundPage from './components/NotFoundPage';
-import LDD from 'libraryd-data'
+import LDD from 'libraryd-data';
+import seo from 'oip-seo';
 
 // initialize the server and configure support for ejs templates
 const app = new Express();
@@ -42,20 +43,23 @@ app.get('*', function(req, res) {
 			res.status(404);
 		}
 
-		let metaseo;
+		var metaseo;
 
 		var urlHash = req.params[0].replace('/media/', '');
-		if (urlHash.length == 64){
+		if ((urlHash.length == 6 || urlHash.length == 64) && req.params[0].includes("media")){
 			console.log(urlHash);
 			LDD.getArtifact(urlHash, function(data){
-				metaseo = '<meta property="og:title" content="' + data[0]['media-data']['alexandria-media'].info.title + '" /><title>' + data[0]['media-data']['alexandria-media'].info.title + '</title>';
+				var artifact = data[0]['media-data']['alexandria-media'];
+
+				metaseo = seo.generateTags(data[0], 'http://' + req.headers.host + req.url, req.headers.host);
+
 				return res.render('index', { metaseo: metaseo, markup: markup, path: '../' });
 			});
 		} else {			
-			metaseo = '<meta name="description" content="this is the description" />';
+			metaseo = '';
 
 			// render the index template with the embedded React markup
-			return res.render('index', { metaseo: '', markup: markup, path: 'http://localhost:3000/' });
+			return res.render('index', { metaseo: '', markup: markup, path: './' });
 		}
 	});
 });

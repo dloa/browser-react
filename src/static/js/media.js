@@ -18,14 +18,15 @@ function loadArtifactView2(objMeta) {
 	$('#view-artifact').show();
 	var mediaID = '';
 	// GET MEDIA ID FROM objMeta
+	console.log(objMeta);
 	if ( (objMeta) && (objMeta.length == 1) ) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
 	// GET MEDIA ID FROM LOCATION
 	} else if (!objMeta) {
-		if (location.hash.slice(1).split('/')[2]) {
-			mediaID = location.hash.slice(1).split('/')[2];
+		if (location.pathname.slice(1).split('/')[2]) {
+			mediaID = location.pathname.slice(1).split('/')[2];
 		} else {
-			mediaID = location.hash.slice(1).split('/')[1];
+			mediaID = location.pathname.slice(1).split('/')[1];
 		}
 	} else {
 		mediaID = objMeta;
@@ -417,6 +418,13 @@ function showPaymentOption(e) {
 }
 
 function mountMediaBrowser(el, data) {
+	console.log(data);
+	try {
+		var crshTst = data[0];
+	} catch (e) {
+		// Data being served is not an array but rather the data supposed to be in the array.
+		data = [data];
+	}
 	var mediaPublisher = data[0]['publisher-name'];
 	var mediaID = data[0]['txid'];
 	var data = data[0]['media-data'];

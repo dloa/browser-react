@@ -58,8 +58,8 @@ function makeHistory(stateObj, newTitle) {
 		} else {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="getAllPublishers()" class="currentView-breadcrumb">Publishers</a> / ' + stateObj.subView;
 		}
-		if (!newUrl.includes(stateObj.subView)){
-			newUrl = newUrl + '/' + stateObj.subView;
+		if (!newUrl.includes(stateObj.subView) && !newUrl.includes(stateObj.subView.substring(0,6))){
+			newUrl = newUrl + '/' + stateObj.subView.substring(0,6);
 			console.log("5" + newUrl);
 		}
 	} else if (stateObj.currentView.slice(0,3) == 'add') {		

@@ -22,10 +22,10 @@ function router (event, goUrl) {
     
     // Current URL
     var url = location.pathname || '/';
-	var paths = url.slice(1).split('/');
+	var paths = url.split('/');
 	console.log(paths);
 	
-	var module = paths[0] ? paths[0] : '/';
+	var module = paths[1] ? paths[1] : '/';
 
 	if (!module)
 		module = 'front';
@@ -123,8 +123,8 @@ function router (event, goUrl) {
 					populateSearchResults(searchResults, route.templateId);
 				} else {
 					var searchOn = paths[2].replace("-","_");
-					if (searchOn.length == 64) {
-						loadArtifactView();
+					if (searchOn.length == 6 || searchOn.length == 64) {
+						loadArtifactView2();
 					} else {
 						console.info(paths);
 						if ( (paths[2] == 'type') && (paths[3]) ) {

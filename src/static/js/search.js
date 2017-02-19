@@ -38,6 +38,62 @@ window.searchAPI = function(module, searchOn, searchFor) {
 	return mediaData;
 }
 
+window.artifactHashTest = function(allArtifacts){
+	var hashLengthOverlapAmount = [];
+	var HASH_LENGTH = 64;
+
+	for (var i = 0; i < HASH_LENGTH; i++) {
+		hashLengthOverlapAmount.push(0);
+	}
+
+	var matches = [];
+
+	console.log(hashLengthOverlapAmount.length);
+
+	// Calculate overlap for each artifact.
+	for (var i = 0; i < allArtifacts.length; i++){
+		// Get the artifact we are working with
+		var artifact = allArtifacts[i];
+
+		// We want to test all lengths of the hash for overlap.
+		for (var k = 1; k <= HASH_LENGTH; k++){
+			// Get the shorter hash to check overlap on
+			var hashPart = artifact.txid.substring(0,k);
+
+			// Now we go through each artifact to see if it overlaps, if it does, add one to the counter on that index (k)
+			for (var j = 0; j < allArtifacts.length; j++){
+				// If we are on the same artifact, skip over
+				if (i == j)
+					continue;
+
+				// Cut the string part
+				var compareHashPart = allArtifacts[j].txid.substring(0,k);
+
+				// Check if they are the same
+				if (hashPart == compareHashPart){
+					var alreadyMatched = false;
+
+					for (var z = 0; z < matches.length; z++){
+						if ((artifact.txid == matches[z].a || artifact.txid == matches[z].b) && (allArtifacts[j].txid == matches[z].a || allArtifacts[j].txid == matches[z].b) && matches[z].length == k){
+							alreadyMatched = true;
+						}
+					}
+					if (!alreadyMatched){
+						// If they are the same, increment that length overlap
+						hashLengthOverlapAmount[k-1]++;
+						matches.push({length: k, a: artifact.txid, b: allArtifacts[j].txid});
+					}
+				}
+			}
+		}
+	}
+
+	for (var i = 0; i < hashLengthOverlapAmount.length; i++) {
+		console.log((i+1) + ": " + hashLengthOverlapAmount[i]);
+	}
+	console.log(hashLengthOverlapAmount);
+}
+
 // This method downgrades oip-041 objects to alexandria-media objects until the code can be updated to only support oip-041.
 window.oipDowngrade = function(oipObject){
 	// Pull out of casing
