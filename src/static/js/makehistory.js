@@ -13,7 +13,7 @@ function makeHistory(stateObj, newTitle) {
 	}
 	$('#viewlabel').children().hide();
 	console.log('Make History!');
-	var newUrl = document.location.origin + document.location.pathname ? document.location.pathname : '/';
+	var newUrl = document.location.origin + document.location.pathname ? document.location.pathname : '';
 	console.log("1" + newUrl);
 	var newBreadcrumbs = '';
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
@@ -30,9 +30,9 @@ function makeHistory(stateObj, newTitle) {
 				newBreadcrumbs = (stateObj.searchOn) ? (newBreadcrumbs + ' / <a onclick="searchByField(&apos;media&apos;, &apos;*&apos;,&apos;'+stateObj.searchTerm+'&apos;);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>') : (newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>');
 			}
 			if (stateObj.currentView == 'media') {
-				newUrl = document.location.origin + '/media';
+				newUrl = newUrl + '/media';
 			} else {
-				newUrl = document.location.origin + '/' + stateObj.currentView;
+				newUrl = newUrl + '/' + stateObj.currentView;
 			}
 			console.log("3" + newUrl);
 		}
