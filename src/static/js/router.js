@@ -42,7 +42,6 @@ function router (event, goUrl) {
 
 	console.log(module);
 
-
     // Get route by url:
     var route = routes[module];
 
@@ -281,6 +280,11 @@ if ( (window.location.pathname.split('/')[window.location.pathname.split('/').le
 } else {
 	// Listen on hash change:
 	window.addEventListener('onpopstate', router);  
+
+	window.onpopstate = function(event) {
+		console.log(event);
+		router(event)
+	};
 
 	// Listen on page load:
 	window.addEventListener('load', router);
