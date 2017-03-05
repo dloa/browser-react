@@ -1,4 +1,6 @@
 // v0.6 LOAD ARTIFACT VIEW
+var priceScale = 1;
+
 function loadArtifactView2(objMeta) {
 	// HIDE OTHER VIEWS
     if ($('#intro').length > 0) {
@@ -33,6 +35,10 @@ function loadArtifactView2(objMeta) {
 	}
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
+
+	if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
+        priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
+    }
     console.log (mediaID, thisMediaData);
 	$('.media-cover').hide();
     window.doMountMediaBrowser('#media-browser', thisMediaData);
@@ -106,7 +112,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowPlay && file.disallowPlay === true) {
             tdPlay = "<td class=\"price disabled\"><span>$<span class=\"price\">N/A</span></span></td>";
         } else {
-            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
+            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay/priceScale : "Free!") + "</span></span></td>";
         }
 
         // Setup cell for price to buy, N/A when disallowBuy === true
@@ -114,7 +120,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowBuy && file.disallowBuy === true) {
             tdBuy = "<td class=\"price disabled\"><span>$<span class=\"price\"><span>N/A</span></span></td>";
         } else {
-            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
+            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? file.sugBuy/priceScale : "Free!") + "</span></span></td>";
         }
 
         // Only add files to the main playlist where type matches artifact type.
@@ -231,7 +237,6 @@ function applyMediaData(data) {
 			}
 			if (payment) {
 				xinfo['files'][i]['type'] = payment['type'];
-				console.log('Artifact uses old payment format');
 			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
@@ -256,22 +261,21 @@ function applyMediaData(data) {
         minBuy: xinfo['files'][0].minBuy
     };
     filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
-    console.info(filetype);
     mediaDataSel.data(media)
 
     // Set what the circles will use for pricing.
     if(!xinfo['files'][0].disallowPlay && xinfo['files'][0].sugPlay) {
     	$('.pwyw-action-play').show();
-	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay);
-	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay)
+	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay/priceScale);
+	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay/priceScale)
     } else {
     	$('.pwyw-action-play').hide();
     }
     if(!xinfo['files'][0].disallowBuy && xinfo['files'][0].sugBuy) {
     	$('#audio-player').hide();
     	$('.pwyw-action-download').show();
-	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
-	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy)
+	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy/priceScale)
+	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy/priceScale)
     } else {
     	$('.pwyw-action-download').hide();
     }
@@ -309,8 +313,6 @@ function applyMediaData(data) {
         }
 
     keepHash = (xinfo['DHT Hash']) ? (xinfo['DHT Hash']) : (media.torrent);
-
-    console.log (media, tracks);
 
 	var pubTime = media.timestamp;
 	if (pubTime.toString().length == 10) {
@@ -394,7 +396,6 @@ function showPaymentOption(e) {
             var btcprice = makePaymentToAddress(btcAddress, price, sugPrice, function () {
                 return onPaymentDone(action, fileData);
             });
-            console.info("Cost of artifact: " + btcprice);
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(sugPrice);
 
@@ -403,8 +404,6 @@ function showPaymentOption(e) {
 
             // Coinbase BTC Code
             // If the price is between $1 and $5 then show the BTC buy widget
-            console.log(btcAddress);
-            console.log(price);
             if (sugPrice >= 1 && sugPrice <= 5){
                 testDomain();
                 createCoinbaseModal(btcAddress, sugPrice, action);
@@ -527,7 +526,10 @@ function mountMediaBrowser(el, data) {
     	            console.error('got jplayer error', e)
     	        }
     	    })
-       	} else {
+       	} else if ( (filetype == 'mov') || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
+			$('#audio-player').hide();
+			$('#playbar-container').hide();
+		} else {
             // Handle Artifact Types that don't use the built-in media player
     		$('.jp-title').text('Unsupported File Format');
 
@@ -544,7 +546,6 @@ function mountMediaBrowser(el, data) {
             setQR(lastAddress, USDToBTC(this.value));
 
             // Update Coinbase modal!
-            console.log(this.value);
             if (this.value >= 1 && this.value <= 5){
                 createCoinbaseModal(lastAddress, this.value, action);
             } else {
@@ -749,7 +750,9 @@ function onPaymentDone (action, file) {
         var fileType = file.track.type;
         if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
             // Use built-in media player for audio and video
-            $('#playbar-container').show();
+            if( !$('#native-player') ) {
+	            $('#playbar-container').show();
+			}
             if (artifactLoaded === false) {
                 $('#playbar-container').jPlayer("load");
                 artifactLoaded = true;

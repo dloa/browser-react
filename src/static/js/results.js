@@ -42,7 +42,7 @@ function filterMediaByType(obj, resetSearch) {
 			home: true
 		}
 		makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
-		populateSearchResults(filteredMedia, 'media');
+		deDupeResults(filteredMedia, 'media');
 		return false;
 	} else {
 		var filterTypes = [obj];
@@ -133,8 +133,76 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 	}
-	console.log(history.state);
-	populateSearchResults(filteredMedia, 'media');
+	deDupeResults(filteredMedia);
+}
+
+// DEDUPE SEARCH RESULTS
+function deDupeResults(filteredMedia) {
+	var revs = 0;
+	var results = {};
+	results.length = 0;
+	for (var i = filteredMedia.length - 1; i >= 0 ; i--) {
+		var txid = filteredMedia[i]['txid'];
+		var artifactData = parseArtifactData(filteredMedia[i]);
+		var deDupeHash = new String(artifactData['info']['title']+'_'+artifactData['publisher']).hashCode();
+		if (results.length === 0) {
+			results[results.length] = {
+				0: deDupeHash,
+				1: artifactData,
+				2: txid,
+				3: filteredMedia[i]['publisher-name']
+			}
+			results.length ++;
+		} else {
+			var isRev = in_array(deDupeHash, results);
+			if (isRev === false) {
+				results[results.length] = {
+					0: deDupeHash,
+					1: artifactData,
+					2: txid,
+					3: filteredMedia[i]['publisher-name']
+				}
+				results.length ++;
+			} else {
+				revs++;
+			}
+		}
+	}
+	populateSearchResults(results, 'media');
+}
+
+function parseArtifactData(artifactObj) {
+	if (artifactObj['media-data']){
+		var artifactData = artifactObj['media-data']['alexandria-media'];
+	} else {
+		var artifactData = artifactObj['oip-041']['artifact'];
+	}
+	return artifactData;
+}
+
+function in_array(what, where) {
+    var a=false;
+    for (var i=0; i<where.length; i++) {
+        if(what == where[i][0]) {
+            a=true;
+            break;
+        }
+    }
+    return a;
+}
+
+String.prototype.hashCode = function(){
+    if (Array.prototype.reduce){
+        return this.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
+    } 
+    var hash = 0;
+    if (this.length === 0) return hash;
+    for (var i = 0; i < this.length; i++) {
+        var character  = this.charCodeAt(i);
+        hash  = ((hash<<5)-hash)+character;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
 }
 
 // POPULATE SEARCH RESULTS
@@ -147,21 +215,25 @@ function populateSearchResults(results, module) {
 	$('#'+module+'-results-title').remove();
 	if ( (module =='media') && (results) ) {
 		var revs = 0;
-		for (var i = 0; i < results.length; i++) {
-			var mediaType = results[i]['media-data']['alexandria-media']['type'];
+		console.info(results);
+		for (var i = results.length - 1; i >= 0; i--) {
+			var mediaType = results[i][1]['type'];
 			if ( (history.state) && (history.state.mediaTypes) ) {
 				if ( (history.state.mediaTypes.length > 0) && (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
 					continue;
 				}
 			}
 			var mediaThumb = mediaIconSVGs[mediaType];
-			var mediaID = results[i]['txid'];
-			var mediaPublisher = results[i]['publisher-name'];
-			var publisherID = results[i]['media-data']['alexandria-media']['publisher'];
-			var mediaHash = results[i]['media-data']['alexandria-media']['torrent'];
-			var mediaInfo = results[i]['media-data']['alexandria-media']['info'];
-			var mediaPubTime = results[i]['media-data']['alexandria-media']['timestamp'];
-			var mediaPubTimeLen = results[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+			if (!mediaThumb) {
+				var mediaThumb = '';
+			}
+			var mediaID = results[i][2];
+			var mediaPublisher = results[i][3];
+			var publisherID = results[i][1]['publisher'];
+			var mediaHash = results[i][1]['torrent'];
+			var mediaInfo = results[i][1]['info'];
+			var mediaPubTime = results[i][1]['timestamp'];
+			var mediaPubTimeLen = results[i][1]['timestamp'].toString().length;
 			if (mediaPubTimeLen == 10) {
 				mediaPubTime = parseInt(mediaPubTime)*1000;
 			}
@@ -223,7 +295,7 @@ function populateSearchResults(results, module) {
 					});
 				}
 			}
-			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '<span class="hasCost">'+thisHasCost+'</span></h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaYear + ' &bull; ' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
+			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '<span class="hasCost">'+thisHasCost+'</span></h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div>'+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
 			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
 				var checkTitleAndPublisher = $(this).find('.media-title').text() + $(this).find('.publisher-id').text();
@@ -286,9 +358,6 @@ function afterSearch() {
 	});
 	var prevResultCount = $('#results-count-wrap span').text();
 	var diffResults = visibleResults - prevResultCount;
-	console.log('prevResultCount = '+ prevResultCount);
-	console.log('visibleResults = '+ visibleResults);
-	console.log('Variation in results = ' + diffResults);
 	$('#results-count-wrap span').text(visibleResults);
 	$('#browse-media-wrap #results-count-wrap.container').show();
 	// Auto-refresh media list
@@ -305,7 +374,6 @@ function autofeed(feed) {
 	// Make this more complex for different use cases (ie. Search reults + Publisher views)
     liveRefresh = setTimeout (function () {
 		var filteredMedia = searchAPI('media', '*', '');
-		console.info(filteredMedia);
-		populateSearchResults(filteredMedia, 'media');
+		deDupeResults(filteredMedia);
     }, 60000);
 }

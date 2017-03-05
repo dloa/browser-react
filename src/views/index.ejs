@@ -216,6 +216,8 @@
         <h2 class="publisher-ui">Create New Publisher</h2>
         <h2 class="wallet-ui">Wallet</h2>
         <div id="header-menu" class="nodrag">
+        	<a href="http://alexandria.io/publisher/" id="publish-module-link">Publish</a>
+            <!--
             <div id="addNewContent-icon" onclick="loadAddContentModal();" class="header-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 25 25" version="1.1" class="replaced-svg">
                     <title>add new content icon</title>
@@ -231,7 +233,7 @@
                         </g>
                     </g>
                 </svg>
-            </div>
+            </div>-->
             <div id="add-menu-modal" class="header-modal ">
                 <ul>
                     <li>
@@ -349,6 +351,7 @@
                                 </g>
                             </svg> Wallet</a>
                     </li>
+                    <li id="IPFS-switch" class="webOnly"></li>
                     <li class="appOnly">
                         <a onclick="" id="user-menu-settings">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg-header-user-settings-icon" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" class="replaced-svg">
@@ -373,7 +376,7 @@
             </div>
         </div>
         <div id="serverID" class="appOnly"></div>
-        <div id="IPFS-switch" class="webOnly"></div>
+        <div id="IPFS-switch" class="appOnly"></div>
     </header>
 
 	<h1>Test</h1>
@@ -1859,7 +1862,7 @@
                     <div id="alexandria-breadcrumbs"></div>
                 </div>
             </div>
-            <div class="pull-right" id="connection-indicator">
+            <div class="pull-right appOnly" id="connection-indicator">
                 <a id="ci-ipfs" href="#" onClick="toggleIPFS()">
                     <span class="connection-status" id="cs-ipfs"></span> IPFS
                 </a>
