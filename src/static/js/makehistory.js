@@ -14,27 +14,41 @@ function makeHistory(stateObj, newTitle) {
 	$('#viewlabel').children().hide();
 	console.log('Make History!');
 	var newUrl = document.location.origin + document.location.pathname ? document.location.pathname : '';
-	console.log("1" + newUrl);
 	console.log(stateObj);
+
+	// Default newUrl start.
+	if (document.location.origin == 'https://alexandria.io')
+			newUrl = document.location.origin + '/dev-browser/';
+		else
+			newUrl = document.location.origin + '/';
+
+	console.log("1" + newUrl);
+
 	var newBreadcrumbs = '';
+
+	// If we are not the front page and we are not adding
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
+		// If the module is defined
 		if (stateObj.module) {
 			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
 			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
 			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + stateObj.module);
 			console.log("2" + newUrl);
 		}
+		// if there is not a subView
 		if (!stateObj.subView) {
+			// if we are "media"
 			if (stateObj.currentView == 'media') {
 				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>';
-			} else if (stateObj.currentView == 'search') {
+			} else if (stateObj.currentView == 'search') { // if we are a search
 				newBreadcrumbs = (stateObj.searchOn) ? (newBreadcrumbs + ' / <a onclick="searchByField(&apos;media&apos;, &apos;*&apos;,&apos;'+stateObj.searchTerm+'&apos;);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>') : (newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>');
 			} else {
 				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>';
 			}
-			if (!newUrl.includes(stateObj.currentView)) {
+
+			if (!stateObj.directToMedia)
 				newUrl = newUrl + stateObj.currentView;
-			}
+
 			console.log("3" + newUrl);
 		}
 	}
@@ -50,9 +64,23 @@ function makeHistory(stateObj, newTitle) {
 		newUrl = newUrl + '/' + urlString;
 		console.log("4" + newUrl);
 	}
+
+	// If there is a search term
 	if (stateObj.searchTerm) {
-		newBreadcrumbs = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / <span id="breadcrumbs-searchOn">' + stateObj.searchOn + '</span> / ' + stateObj.searchTerm);
-		newUrl = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(/\s/g , "-")) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(/\s/g , "-"));
+		if (!stateObj.searchOn || stateObj.searchOn == '*'){
+			// There is no search term
+			newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.searchTerm;
+		} else {
+			newBreadcrumbs + ' / <span id="breadcrumbs-searchOn">' + stateObj.searchOn + '</span> / ' + stateObj.searchTerm;
+		}
+
+
+		if ((!stateObj.searchOn) || (stateObj.searchOn == '*')) {
+			// We are searching everything.
+			newUrl = newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(/\s/g , "-");
+		} else {
+			newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(/\s/g , "-");
+		}
 	} else if (stateObj.subView) {
 		if (stateObj.artifactTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">Media</a> / <a onclick="loadPublisherEntity(this)" id="publisher-'+ stateObj.publisherId +'">'+ stateObj.artifactPublisher +'</a> / <a onclick="filterMediaByType(&apos;'+stateObj.mediaType+'&apos;)">' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + '</a> / ' + stateObj.artifactTitle;
@@ -60,7 +88,12 @@ function makeHistory(stateObj, newTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="getAllPublishers()" class="currentView-breadcrumb">Publishers</a> / ' + stateObj.subView;
 		}
 		if (!newUrl.includes(stateObj.subView) && !newUrl.includes(stateObj.subView.substring(0,6))){
-			newUrl = newUrl + '/' + stateObj.subView.substring(0,6);
+			// Check if we already have an ending '/'
+			if (newUrl.substr(newUrl.length - 1) == "/")
+				newUrl = newUrl + stateObj.subView.substring(0,6);
+			else // there is a trailing /
+				newUrl = newUrl + '/' + stateObj.subView.substring(0,6);
+
 			console.log("5" + newUrl);
 		}
 	} else if (stateObj.currentView.slice(0,3) == 'add') {		
@@ -73,14 +106,23 @@ function makeHistory(stateObj, newTitle) {
 		newUrl = newUrl + '/' + stateObj.currentView;
 		console.log("6" + newUrl);		
 	}
+	if (stateObj.directToMedia){
+		var last6 = document.location.pathname.substring(document.location.pathname.length-6, document.location.pathname.length);
+		if (!newUrl.includes(last6)){
+			if (newUrl.substr(newUrl.length - 1) == "/")
+				newUrl = newUrl + last6;
+			else // there is a trailing /
+				newUrl = newUrl + '/' + last6;
+		}
+	}
 
 	if (stateObj.home){
 		newBreadcrumbs = '/';
 
 		if (document.location.origin == 'https://alexandria.io')
-			newUrl = '/dev-browser/media';
+			newUrl = '/dev-browser/';
 		else
-			newUrl = '/media';
+			newUrl = '/';
 		
 		newTitle = "Alexandria"
 	}

@@ -4,7 +4,8 @@
   "description": "A react version of the browser that allows SSR out of the box along with faster loading times.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel-watch --presets react,es2015 src/server.js"
   },
   "keywords": [
     "Alexandria",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "babel-loader": "^6.2.10",
+    "babel-watch": "^2.0.6",
     "http-server": "^0.9.0",
     "webpack": "^1.13.3"
   }

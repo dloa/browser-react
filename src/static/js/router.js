@@ -42,14 +42,30 @@ function router (event, goUrl) {
 
 	console.log(module);
 
+
     // Get route by url:
     var route = routes[module];
+
+    // if we need to modify the paths (aka, if we are trying to go directly to the media) then we set this to true.
+    var fixPaths = false;
 
     if (!route){
     	var route = routes['/' + module];
     	if (!route){
-    		console.log(location.pathname);
-	    	route = routes['/media'];
+    		// No route (aka, they have likely attempted to go directly to an artifact)
+    		if (module.length == 6 || module.length == 64){
+    			route = routes['/media'];
+    			// We are fixing the paths, so change this
+    			fixPaths = true;
+    			// create the "path" like it would be normally created.
+    			paths = ["", "media", module];
+
+    			console.log(paths);
+    		} else {
+    			// Since we cannot figure out where they want to go, send them to the media route.
+    			console.log(location.pathname);
+		    	route = routes['/media'];
+    		}
     	}
 
     }
@@ -64,6 +80,7 @@ function router (event, goUrl) {
 		resetInterface();
     	if (route.templateId == 'media') {
 			if (!paths[2]) {
+				// There seems to be no second path
 				filterMediaByType();
 			} else if (paths[2] == 'type') {
 				var parseTypes = location.pathname.split('type/')[1].split('-');
@@ -134,11 +151,15 @@ function router (event, goUrl) {
 				} else {
 					var searchOn = paths[2].replace("-","_");
 					if (searchOn.length == 6 || searchOn.length == 64) {
-						loadArtifactView2();
+
+						// We can just pass in the txid and it will look it up from there.
+						loadArtifactView2(searchOn);
+
 						var stateObj = {
 							currentView: 'media',
 							searchResults: false,
-							isFront: true							
+							isFront: true,
+							directToMedia: fixPaths // This is only true if we browsed directly to the media. This is set above when we maniupalate the Paths variable.				
 						}
 						makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 					} else {
