@@ -168,6 +168,7 @@ function deDupeResults(filteredMedia) {
 			}
 		}
 	}
+	console.log("rmvd " + revs + " dups"); 
 	populateSearchResults(results, 'media');
 }
 
@@ -296,21 +297,13 @@ function populateSearchResults(results, module) {
 				}
 			}
 			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '<span class="hasCost">'+thisHasCost+'</span></h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div>'+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
-			var thisTitleAndPublisher = mediaTitle+publisherID;
-			$('#browse-media-wrap .row').each(function(){
-				var checkTitleAndPublisher = $(this).find('.media-title').text() + $(this).find('.publisher-id').text();
-				if(checkTitleAndPublisher.toLowerCase() === thisTitleAndPublisher.toLowerCase()){
-					revs ++;
-					$(this).remove();
-				}
-			});
+			
 			if ($('#browse-media-wrap #'+module+'-results-wrap .row').length < 1){
 				$('#browse-media-wrap #'+module+'-results-wrap').append(mediaEntity);
 			} else {
 				$('#browse-media-wrap #'+module+'-results-wrap .row:first-of-type').before(mediaEntity);
 			}
 		}
-		console.log(revs + ' revisions or dupes found');
 		$('#browse-media-wrap #'+module+'-results-wrap .row.'+module+'-entity:first-of-type').addClass('first');
 	} else if ( (module =='publisher') && (results) ) {
 		for (var i = 0; i < results.length; i++) {
