@@ -53,7 +53,15 @@ app.get('*', function(req, res) {
 				if (!data[0]){
 					return res.render('index', { metaseo: '', markup: markup });
 				}
-				var artifact = data[0]['media-data']['alexandria-media'];
+				
+
+				var artifact = '';
+
+				// alexandria-media
+				if (data[0]['media-data'])
+					artifact = data[0]['media-data']['alexandria-media'];
+				else //OIP
+					artifact = data[0]['oip-041'].artifact;
 
 				metaseo = seo.generateTags(data[0], 'http://' + req.headers.host + req.url, req.headers.host);
 
@@ -63,7 +71,13 @@ app.get('*', function(req, res) {
 			urlHash = req.params[0].replace('/player/', '');
 			console.log("Player: " + urlHash);
 			LDD.getArtifact(urlHash, function(data){
-				var artifact = data[0]['media-data']['alexandria-media'];
+				var artifact = '';
+
+				// alexandria-media
+				if (data[0]['media-data'])
+					artifact = data[0]['media-data']['alexandria-media'];
+				else //OIP
+					artifact = data[0]['oip-041'].artifact;
 
 				var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> .video { width:100%; height:auto; }</style><div class="video"><video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video></div></body></html>';
 				
