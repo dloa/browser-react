@@ -1,11 +1,11 @@
 // FLOVAULT INIT
 function FloVaultInit() {
-	loadScript(document.location.origin + '/js/SimpleWallet.js', SimpleWallet_loaded);
+	loadScript(document.location.origin + '/static/js/SimpleWallet.js', SimpleWallet_loaded);
 }
 
 function SimpleWallet_loaded() {
 	console.log('SimpleWallet.js loaded');
-	loadScript(document.location.origin + '/js/SimpleDeps.js', SimpleDeps_loaded);
+	loadScript(document.location.origin + '/static/js/SimpleDeps.js', SimpleDeps_loaded);
 };
 
 function SimpleDeps_loaded() {
