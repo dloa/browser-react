@@ -335,3 +335,40 @@
 .playlist-table span.price.disabled {
     opacity: 0.2;
 }
+
+/* The alert message box */
+.sky-alert {
+    padding: 10px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.sky-alert.warning {
+    background-color: #ff9800;
+}
+
+.sky-alert.info {
+    background-color: #2196F3;
+}
+.sky-alert.success {
+    background-color: #4CAF50;
+}
+
+/* The close button */
+.sky-closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.sky-closebtn:hover {
+    color: black;
+}

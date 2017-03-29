@@ -1305,7 +1305,11 @@
 				                               $<span class="pwyw-price-suggest-download pwyw-suggested-price">suggest-dl</span> to buy
                                         </span>
                                         <br />
-                                        <span>$ <input class="pwyw-usd-price-input pwyw-usd-price-input" maxlength="4" /> USD</span>
+                                        <span>$ <input class="pwyw-usd-price-input pwyw-usd-download-price-input" maxlength="4" /> USD</span>
+                                        <div id="buy-warning" class="sky-alert warning">
+											<span class="sky-closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+											Warning! Coinbase Purchase amount exceeds price, please install ProTip to deposit the extra.
+										</div>
                                         <div class="payment-select-buttons">
                                             <a class="coinbase-widget" id="coinbase_widget_download" href="" style="display:none"></a>
                                         </div>
@@ -1332,6 +1336,10 @@
                                         </span>
                                         <br />
                                         <span>$ <input class="pwyw-usd-price-input pwyw-usd-play-price-input" maxlength="4" /> USD</span>
+                                        <div id="play-warning" class="sky-alert warning">
+											<span class="sky-closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+											Warning! Coinbase Purchase amount exceeds price, please install ProTip to deposit the extra.
+										</div>
                                         <div class="payment-select-buttons">
                                             <a class="coinbase-widget" id="coinbase_widget_play" href="" style="display:none"></a>
                                         </div>

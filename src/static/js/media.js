@@ -403,13 +403,15 @@ function showPaymentOption(e) {
             actionElement.addClass('active');
 
             // Coinbase BTC Code
-            // If the price is between $1 and $5 then show the BTC buy widget
-            if (sugPrice >= 1 && sugPrice <= 5){
-                testDomain();
-                createCoinbaseModal(btcAddress, sugPrice, action);
+            if (sugPrice < 1){
+    			$('#play-warning').show();
+    			$('#buy-warning').show();
             } else {
-                hideCoinbaseButton();
+            	$('#play-warning').hide();
+            	$('#buy-warning').hide();
             }
+            testDomain();
+            createCoinbaseModal(btcAddress, sugPrice, action);
 
             // Show paywall
             togglePWYWOverlay(true);
@@ -546,11 +548,14 @@ function mountMediaBrowser(el, data) {
             setQR(lastAddress, USDToBTC(this.value));
 
             // Update Coinbase modal!
-            if (this.value >= 1 && this.value <= 5){
-                createCoinbaseModal(lastAddress, this.value, action);
+            if (this.value < 1){
+                $('#play-warning').show();
+                $('#buy-warning').show();
             } else {
-                hideCoinbaseButton();
+                $('#play-warning').hide();
+                $('#buy-warning').hide();
             }
+            createCoinbaseModal(lastAddress, this.value, action);
         }
 
     })
@@ -791,9 +796,12 @@ function makePaymentToAddress(address, minAmt, sugAmt, done) {
             console.log("Payment address", data.input_address, "Amount:", sugAmt);
             lastAddress = data.input_address;
             setQR(data.input_address, USDToBTC(sugAmt));
-            if (sugAmt >= 1 && sugAmt <= 5){
-            	updateCoinbaseModal(data.input_address, sugAmt);
+            if (sugAmt < 1){
+    			$('#play-warning').show();
+            } else {
+            	$('#play-warning').hide();
             }
+            updateCoinbaseModal(data.input_address, sugAmt);
             watchForpayment(data.input_address, minAmt, done);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
