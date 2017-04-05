@@ -1,3 +1,20 @@
+// Check for # in URL and make old format work
+if (location.hash) {
+	hashRedirect();
+}
+
+function hashRedirect() {
+	var locationHash = location.hash.split('/').slice(1);
+	console.log(locationHash);
+	var newPath = '';
+	for (var hashInt = 0; hashInt < locationHash.length; hashInt ++){
+		newPath += locationHash[hashInt] + '/';
+	}
+	location.href = location.href.split('#')[0] + newPath.slice(0,-1);
+	return false;
+}
+
+
 // The route registering function:
 var routes = {};
 
@@ -230,7 +247,7 @@ function router (event, goUrl) {
 			}
 			stateObj.searchTerm = (paths[2]) ? (paths[2].toString().replace(/-/g, ' ').split('?')[0]) : ('');
 			$('#search-main').val(paths[2].toString().replace(/-/g, ' '));
-
+				
 			if(paths.length == 4){
 				loadArtifactView2();
 			} else {
