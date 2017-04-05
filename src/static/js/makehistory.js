@@ -18,7 +18,7 @@ function makeHistory(stateObj, newTitle) {
 
 	// Default newUrl start.
 	if (document.location.origin == 'https://alexandria.io')
-			newUrl = document.location.origin + '/dev-browser/';
+			newUrl = document.location.origin + '/browser/';
 		else
 			newUrl = document.location.origin + '/';
 
@@ -121,7 +121,7 @@ function makeHistory(stateObj, newTitle) {
 
 		newUrl = document.location.origin;
 		if (document.location.origin == 'https://alexandria.io')
-			newUrl += '/dev-browser/media';
+			newUrl += '/browser/media';
 		else
 			newUrl += '/media';
 		
