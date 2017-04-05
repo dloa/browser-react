@@ -116,13 +116,14 @@ function makeHistory(stateObj, newTitle) {
 		}
 	}
 
-	if (stateObj.home){
+	if (stateObj.front){
 		newBreadcrumbs = '/';
 
+		newUrl = document.location.origin;
 		if (document.location.origin == 'https://alexandria.io')
-			newUrl = '/dev-browser/';
+			newUrl += '/dev-browser/media';
 		else
-			newUrl = '/';
+			newUrl += '/media';
 		
 		newTitle = "Alexandria"
 	}
@@ -137,5 +138,6 @@ function makeHistory(stateObj, newTitle) {
 	}
 	document.title = newTitle;
 	console.log("7" + newUrl);
+	console.info(stateObj);
 	history.pushState(stateObj, newTitle, newUrl);
 }
