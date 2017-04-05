@@ -18,7 +18,7 @@ function makeHistory(stateObj, newTitle) {
 
 	// Default newUrl start.
 	if (document.location.origin == 'https://alexandria.io')
-			newUrl = document.location.origin + '/dev-browser/';
+			newUrl = document.location.origin + '/browser/';
 		else
 			newUrl = document.location.origin + '/';
 
@@ -116,13 +116,14 @@ function makeHistory(stateObj, newTitle) {
 		}
 	}
 
-	if (stateObj.home){
+	if (stateObj.front){
 		newBreadcrumbs = '/';
 
+		newUrl = document.location.origin;
 		if (document.location.origin == 'https://alexandria.io')
-			newUrl = '/dev-browser/';
+			newUrl += '/browser/media';
 		else
-			newUrl = '/';
+			newUrl += '/media';
 		
 		newTitle = "Alexandria"
 	}
@@ -138,5 +139,6 @@ function makeHistory(stateObj, newTitle) {
 	document.title = newTitle;
 	console.info(stateObj);
 	console.log("7" + newUrl);
+	console.info(stateObj);
 	history.pushState(stateObj, newTitle, newUrl);
 }
