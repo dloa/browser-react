@@ -40,7 +40,8 @@ function loadArtifactView2(objMeta) {
         if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
             priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
         }
-    }     console.log (mediaID, thisMediaData);
+    }
+    console.log (mediaID, thisMediaData);
 	$('.media-cover').hide();
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
