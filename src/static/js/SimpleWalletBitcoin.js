@@ -270,7 +270,7 @@ var BTCWallet = (function () {
 			//	 CutUnspent.push(unspents[v]);
 			//	 break;
 			// }
-			CurrentAmount += parseFloat(unspents[v].value);
+			CurrentAmount += unspents[v].value;
 			CutUnspent.push(unspents[v]);
 			if (CurrentAmount > amount) {
 				break;
@@ -342,6 +342,7 @@ var BTCWallet = (function () {
 				this.getUnspent(fromAddress, function (data) {
 					//var merged = _this.mergeUnspent(data, fromAddress);
 					//var clean_unspent = _this.removeSpent(merged);
+					amount = parseInt((amount * Math.pow(10, 8)).toString());
 					data = _this.calculateBestUnspent(amount, data);
 					console.log(data);
 					// temporary constant
@@ -349,16 +350,16 @@ var BTCWallet = (function () {
 					var tx = new Bitcoin.Transaction();
 					// IMPORTANT! We're dealing with Satoshis now
 					var totalUnspent = data.total;
-					amount = parseInt((amount * Math.pow(10, 8)).toString());
-					if (amount < minFeePerKb) {
-						alert("You must send at least 0.001 BTC (otherwise your transaction may get rejected)");
-						return;
-					}
+					//if (amount < minFeePerKb) {
+					//	alert("You must send at least 0.001 BTC (otherwise your transaction may get rejected)");
+					//	return;
+					//}
 					console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
 					for (var v in unspents) {
-						if (unspents[v].confirmations) {
+						// Add them regardless of if there is zero confirmations.
+						if (unspents[v].tx_hash_big_endian && unspents[v].tx_output_n){
 							tx.addInput(unspents[v].tx_hash_big_endian, unspents[v].tx_output_n);
 							_this.putSpent(unspents[v]);
 						}
@@ -367,7 +368,7 @@ var BTCWallet = (function () {
 					tx.addOutput(toAddress, amount);
 					console.log(tx);
 					//var estimatedFee = _this.coin_network.estimateFee(tx);
-					var estimatedFee = 1000;
+					var estimatedFee = 12000; // this is ~1.5¢ ~45 satoshi per byte (45 * 266 ~= 12000)
 					console.log(estimatedFee);
 					if (estimatedFee > 0) {
 						// Temporary fix for "stuck" transactions
@@ -465,10 +466,10 @@ var BTCWallet = (function () {
 			cache: false,
 			//beforeSend: function(xhr){xhr.setRequestHeader('Content-Type', 'text/plain; charset=utf-8');},
 			success: function (data) {
-				console.log(data);
 				if (data) {
-					var addr_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, ''));
-					console.log(addr_data);
+					console.log(data);
+					//var addr_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, ''));
+					//console.log(addr_data);
 					//_this.setBalance(addr_data['address'], addr_data['final_balance']);
 				}
 			}
