@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
-import Layout from './components/Layout';
+import Layout from './components/layout';
 import BrowsePage from './components/BrowsePage';
 import ArtifactPage from './components/ArtifactPage';
 //import AthletePage from './components/AthletePage';

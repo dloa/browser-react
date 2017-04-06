@@ -7,6 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-watch --presets react,es2015 src/server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dloa/browser-react"
+  },
   "keywords": [
     "Alexandria",
     "React",
