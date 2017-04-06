@@ -25,6 +25,9 @@
 .jp-interface {
 	margin-top: 30px;
 }
+#audio-player > img {
+    width: auto !important;
+}
 .playbar-shadow {
     border-radius: 20px;
     transition: all 0.2s;

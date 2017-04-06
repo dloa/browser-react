@@ -22,7 +22,7 @@ function fillCoinbaseBuyWidget(bitcoinAddress, amount){
 		updateCoinbaseModal(bitcoinAddress, amount);
 }
 function testDomain(){
-	if(window.location.hostname != "alexandria.io" && location.hostname != "localhost"){
+	if(window.location.hostname != "alexandria.io"){
 		console.log("Not on supported domains, remove Coinbase button.");
 		$('#coinbase_widget_play').remove();
 		$('#coinbase_widget_download').remove();
