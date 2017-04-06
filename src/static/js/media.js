@@ -380,6 +380,13 @@ function showPaymentOption(e) {
             price = fileData.minPlay ? fileData.minPlay : 0;
             sugPrice = fileData.sugPlay ? fileData.sugPlay : 0;
 		}
+
+		// Preform checks on payment edge cases
+		if ((price === 0 || price === undefined || price == NaN) && sugPrice !== 0){
+			console.log(price, sugPrice);
+			price = sugPrice;
+		}
+
         if (price === 0 || price === undefined || price == NaN){
             onPaymentDone(action, fileData);
             return;
