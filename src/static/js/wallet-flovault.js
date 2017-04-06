@@ -1,6 +1,6 @@
 // FLOVAULT INIT
 function FloVaultInit() {
-	loadScript(document.location.origin + '/static/js/SimpleWallet.js', SimpleWallet_loaded);
+	loadScript(document.location.origin + '/static/js/SimpleWalletFlorincoin.js', SimpleWallet_loaded);
 }
 
 function SimpleWallet_loaded() {
