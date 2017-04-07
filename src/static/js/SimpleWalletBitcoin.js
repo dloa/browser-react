@@ -40,6 +40,15 @@ var BTCWallet = (function () {
 		}
 	};
 
+	Wallet.prototype.getFirstAddress = function() {
+		var firstAddress = "";
+		for (var i in this.addresses){
+			if (firstAddress === "")
+				firstAddress = this.addresses[i].addr;
+		}
+		return firstAddress;
+	}
+
 	Wallet.prototype.putSpent = function (spent) {
 		this.known_spent.push(spent);
 		var unspent = this.known_unspent;
