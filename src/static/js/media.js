@@ -116,7 +116,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowPlay && file.disallowPlay === true) {
             tdPlay = "<td class=\"price disabled\"><span>$<span class=\"price\">N/A</span></span></td>";
         } else {
-            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay/priceScale : "Free!") + "</span></span></td>";
+            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? (file.sugPlay/priceScale).toFixed(2) : "Free!") + "</span></span></td>";
         }
 
         // Setup cell for price to buy, N/A when disallowBuy === true
@@ -124,7 +124,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowBuy && file.disallowBuy === true) {
             tdBuy = "<td class=\"price disabled\"><span>$<span class=\"price\"><span>N/A</span></span></td>";
         } else {
-            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? file.sugBuy/priceScale : "Free!") + "</span></span></td>";
+            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? (file.sugBuy/priceScale).toFixed(2) : "Free!") + "</span></span></td>";
         }
 
         // Only add files to the main playlist where type matches artifact type.
@@ -136,7 +136,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
 		          tdBuy +
 		          "</tr>");
 		var trackEl = extraFiles.children().last();
-		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
+		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
 	} else {
 
 		el.append("<tr><td>" + i++ + "</td>" +
@@ -147,7 +147,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
 		          tdBuy +
 		          "</tr>");
 		var trackEl = el.children().last();
-		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
+		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
 	}
     });
     if (extraFiles.children().length < 1) {
@@ -255,14 +255,15 @@ function applyMediaData(data) {
 			i++
 		});
 	}
+	console.log (priceScale);
     mainFile = {
         track: xinfo['files'][0],
         name: xinfo['files'][0].dname,
         url: IPFSUrl([xinfo['DHT Hash'], xinfo['files'][0].fname]),
-        sugPlay: xinfo['files'][0].sugPlay,
-        minPlay: xinfo['files'][0].minPlay,
-        sugBuy: xinfo['files'][0].sugBuy,
-        minBuy: xinfo['files'][0].minBuy
+        sugPlay: ((xinfo['files'][0].sugPlay)/priceScale),
+        minPlay: ((xinfo['files'][0].minPlay)/priceScale),
+        sugBuy: ((xinfo['files'][0].sugBuy)/priceScale),
+        minBuy: ((xinfo['files'][0].minBuy)/priceScale)
     };
     filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
     mediaDataSel.data(media)
@@ -270,8 +271,8 @@ function applyMediaData(data) {
     // Set what the circles will use for pricing.
     if(!xinfo['files'][0].disallowPlay && xinfo['files'][0].sugPlay) {
     	$('.pwyw-action-play').show();
-	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay/priceScale);
-	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay/priceScale)
+	    $('.pwyw-price-play').text((xinfo['files'][0].sugPlay/priceScale).toFixed(2));
+	    $('.pwyw-price-suggest-play').text((xinfo['files'][0].sugPlay/priceScale).toFixed(2));
     } else {
     	$('.pwyw-action-play').hide();
     }
@@ -365,10 +366,12 @@ function showPaymentOption(e) {
         var	fileData = $('.playlist tr.active').data();
         $('.media-track').hide();
         var btcAddress = $('.ri-btc-address').text();
-        var price = 0;
-        var sugPrice = 0;
+        var price;
+        var sugPrice;
         var actionElement;
         var action;
+
+        console.log(fileData);
 
         // Check if we are the play or download button
         if ($(self).closest('td').hasClass('tb-price-download') || $(self).closest('li').hasClass('pwyw-action-download') || $(self).closest('tbody').hasClass('playlist-extra-files')){
@@ -385,7 +388,7 @@ function showPaymentOption(e) {
 
 		// Preform checks on payment edge cases
 		if ((price === 0 || price === undefined || price == NaN) && sugPrice !== 0){
-			console.log(price, sugPrice);
+			console.log(price + " " + sugPrice);
 			price = sugPrice;
 		}
 
@@ -404,6 +407,7 @@ function showPaymentOption(e) {
         if (artifactLoaded === false) {
             artifactLoaded = true;
         } else {
+        	// Overwrite btcAddress to be the local wallet
             var btcprice = makePaymentToAddress(btcAddress, price, sugPrice, function () {
                 return onPaymentDone(action, fileData);
             });
