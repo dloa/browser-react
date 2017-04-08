@@ -412,7 +412,7 @@ function showPaymentOption(e) {
                 return onPaymentDone(action, fileData);
             });
             $('.pwyw-btc-' + action + '-price').text(btcprice);
-            $('.pwyw-usd-' + action + '-price-input').val(sugPrice);
+            $('.pwyw-usd-' + action + '-price-input').val(sugPrice.toFixed(2));
 
             $('.pwyw-container').removeClass('active');
             actionElement.addClass('active');
