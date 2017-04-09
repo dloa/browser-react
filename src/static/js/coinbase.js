@@ -36,6 +36,14 @@ function createCoinbaseModal(bitcoinAddress, amount, action) {
 	if (action != 'play' && action != 'download')
 		return;
 
+	var tmpBTC = bitcoinAddress;
+	try {
+		bitcoinAddress = btc_wallet.getFirstAddress();
+		console.log("Swapped Coinbase for local BTC wallet");
+	} catch (e) {
+		console.log(e);
+	}
+
 	// Check if modal exists and redirect
 	if ((action == 'play' && buyWidgetSettings.play_generated) || (action == 'download' && buyWidgetSettings.dl_generated)){
 		console.log("Modal already exists, reroute");

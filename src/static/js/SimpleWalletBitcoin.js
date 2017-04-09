@@ -50,12 +50,13 @@ var BTCWallet = (function () {
 	}
 
 	Wallet.prototype.putSpent = function (spent) {
+		console.log(spent);
 		this.known_spent.push(spent);
 		var unspent = this.known_unspent;
 		// clean out known unspent
 		for (var v in unspent) {
 			if (JSON.stringify(spent) == JSON.stringify(unspent[v])) {
-				delete this.known_unspent[k];
+				delete this.known_unspent[v];
 			}
 		}
 		this.storeSpent();
@@ -95,6 +96,7 @@ var BTCWallet = (function () {
 	Wallet.prototype.addAddress = function (address, data) {
 		if (address in this.addresses) {
 			alert("Warning: address " + address + " already exists, skipping.");
+			console.warning("Warning: address " + address + " already exists, skipping.");
 		}
 		else {
 			this.addresses[address] = data;
@@ -126,11 +128,11 @@ var BTCWallet = (function () {
 					_success();
 				} catch (ex) {
 					alert("There was an error rendering this page. Please contact an administrator.");
-					console.log(ex);
+					console.error(ex);
 				}
 			} catch (ex) {
 				alert("Error decrypting wallet - Invalid password?");
-				console.log(ex);
+				console.error(ex);
 			}
 		} else {
 
@@ -162,16 +164,18 @@ var BTCWallet = (function () {
 		var _this = this;
 		for (var i in this.addresses) {
 			$.ajax({
-				url: blockchainBaseURL + '/rawaddr/' + this.addresses[i].addr + "?format=json",
+				//url: blockchainBaseURL + '/rawaddr/' + this.addresses[i].addr + "?format=json",
+				url: 'http://btc.blockr.io/api/v1/address/info/' + this.addresses[i].addr + '?confirmations=0',
 				data: "",
 				type: "GET",
 				cache: false,
+				async: false,
 				beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Allow-Headers', 'x-requested-with');},
 				success: function (data) {
 					if (data) {
-						var addr_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, ''));
+						var addr_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, '')).data;
 						console.log(addr_data);
-						_this.setBalance(addr_data['address'], addr_data['final_balance'] / Math.pow(10, 8) );
+						_this.setBalance(addr_data['address'], addr_data['balance']);
 					}
 				}
 			});
@@ -179,16 +183,18 @@ var BTCWallet = (function () {
 	};
 	Wallet.prototype.getUnspent = function (address, callback) {
 		$.ajax({
-			url: blockchainBaseURL + '/unspent?active=' + address + "&format=json",
+			//url: blockchainBaseURL + '/unspent?active=' + address + "&format=json",
+			url: 'http://btc.blockr.io/api/v1/address/unspent/' + address + '?unconfirmed=1',
 			data: "",
 			type: "GET",
 			cache: false,
+			async: false,
 			beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Allow-Headers', 'x-requested-with');},
-			success: function (data) {
-				if (data) {
-					var unspent_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, ''));
+			success: function (res) {
+				if (res) {
+					var unspent_data = JSON.parse(res.responseText.replace(/<\/?[^>]+>/gi, '')).data;
 					console.log(unspent_data);
-					callback(unspent_data.unspent_outputs);
+					callback(unspent_data.unspent);
 					//_this.setBalance(addr_data['address'], addr_data['final_balance']);
 				}
 			}
@@ -251,6 +257,8 @@ var BTCWallet = (function () {
 	 * @returns {{unspent: Array<UnspentTX>, total: number}}
 	 */
 	Wallet.prototype.calculateBestUnspent = function (amount, unspents) {
+		console.log(this.known_spent);
+		console.log(this.known_unspent);
 		console.log("calcBestUnspent");
 		console.log(unspents);
 		// note: unspents = [ {tx, amount, n, confirmations, script}, ... ]
@@ -258,38 +266,55 @@ var BTCWallet = (function () {
 		// e.g. compare the size to the confirmations so that larger coins
 		// are used, as well as ones with the highest confirmations.
 		unspents.sort(function (a, b) {
-			// if (a.confirmations > b.confirmations) {
-			//	 return -1;
-			// }
-			// if (a.confirmations < b.confirmations) {
-			//	 return 1;
-			// }
-			if (a.value > b.value) {
+			//if (a.confirmations > b.confirmations) {
+			//	return -1;
+			//}
+			//if (a.confirmations < b.confirmations) {
+			//	return 1;
+			//}
+			if (parseFloat(a.amount) > parseFloat(b.amount)) {
 				return 1;
 			}
-			if (a.value < b.value) {
+			if (parseFloat(a.amount) < parseFloat(b.amount)) {
 				return -1;
 			}
 			return 0;
 		});
+
+		console.log(unspents);
 		var CutUnspent = [], CurrentAmount = 0;
-		for (var v in unspents) {
-			// if (parseFloat(unspents[v].amount) > amount) {
-			//	 CurrentAmount += parseFloat(unspents[v].amount);
-			//	 CutUnspent.push(unspents[v]);
-			//	 break;
-			// }
-			CurrentAmount += unspents[v].value;
-			CutUnspent.push(unspents[v]);
-			if (CurrentAmount > amount) {
-				break;
+		for (var v = 0; v < unspents.length; v++) {
+			console.log(unspents[v]);
+			// 2005 is the satoshi fee
+			if (CurrentAmount > (amount + 2005) / Math.pow(10,8)) {
+				 break;
+			} else {
+				var alreadySpent = false;
+				for (var i = 0; i < this.known_spent.length; i++){
+					console.log(this.known_spent[i].tx, unspents[v].tx)
+					if (this.known_spent[i].tx == unspents[v].tx)
+						alreadySpent = true;
+				}
+				if (alreadySpent) {
+					continue;
+				} else {
+					console.log("here");
+					CurrentAmount += parseFloat(unspents[v].amount);
+					var tmp = unspents[v];
+					// Convert to float before adding
+					tmp.amount = parseFloat(tmp.amount);
+					CutUnspent.push(tmp);
+				}
 			}
 		}
-		if (CurrentAmount < amount) {
+		console.log((amount + 2005) / Math.pow(10,8));
+		console.log(CurrentAmount, CutUnspent);
+		if (CurrentAmount < (amount + 2005) / Math.pow(10,8)) {
 			throw "Not enough coins in unspents to reach target amount";
 			alert("Not enough coins in unspents to reach target amount");
+			console.error("Not enough coins in unspents to reach target amount");
 		}
-		return {unspent: CutUnspent, total: CurrentAmount};
+		return {unspent: CutUnspent, total: CurrentAmount * Math.pow(10,8)};
 	};
 	Wallet.prototype.validateKey = function (key, priv) {
 		if (priv === void 0) {
@@ -297,6 +322,7 @@ var BTCWallet = (function () {
 		}
 		try {
 			var version;
+			var scriptHash;
 			// are we validating a private key?
 			if (priv === true) {
 				version = this.coin_network.wif;
@@ -304,11 +330,15 @@ var BTCWallet = (function () {
 			else {
 				version = this.coin_network.pubKeyHash;
 			}
+			if (this.coin_network.scriptHash)
+				scriptHash = this.coin_network.scriptHash;
+
 			var decoded = Bitcoin.base58check.decode(key);
 
-			if( this.coin_network == Bitcoin.networks.florincoin && priv == true){
-				// Backwards compatibility for private keys saved under litecoin settings.
-				return decoded[0] == Bitcoin.networks.florincoin.wif || decoded[0] == Bitcoin.networks.litecoin.wif
+			console.log(decoded, version);
+
+			if (decoded[0] == scriptHash){
+				return true;
 			}
 
 			// is this address for the right network?
@@ -344,8 +374,10 @@ var BTCWallet = (function () {
 		if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
 			if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
 				this.refreshBalances();
+				console.log(this.balances[fromAddress], amount);
 				if (this.balances[fromAddress] < amount) {
 					alert("You don't have enough coins to do that");
+					console.error("You don't have enough coins to do that", this.balances[fromAddress], amount);
 					return;
 				}
 				this.getUnspent(fromAddress, function (data) {
@@ -366,10 +398,11 @@ var BTCWallet = (function () {
 					console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
+					console.log(unspents);
 					for (var v in unspents) {
 						// Add them regardless of if there is zero confirmations.
-						if (unspents[v].tx_hash_big_endian && unspents[v].tx_output_n){
-							tx.addInput(unspents[v].tx_hash_big_endian, unspents[v].tx_output_n);
+						if (unspents[v].tx && (unspents[v].n == 1 || unspents[v].n == 0)){
+							tx.addInput(unspents[v].tx, unspents[v].n);
 							_this.putSpent(unspents[v]);
 						}
 					}
@@ -377,7 +410,8 @@ var BTCWallet = (function () {
 					tx.addOutput(toAddress, amount);
 					console.log(tx);
 					//var estimatedFee = _this.coin_network.estimateFee(tx);
-					var estimatedFee = 12000; // this is ~1.5¢ ~45 satoshi per byte (45 * 266 ~= 12000)
+					//var estimatedFee = 12000; // this is ~1.5¢ ~45 satoshi per byte (45 * 266 ~= 12000)
+					var estimatedFee = 2000; // Lowered the fee, this should take ~1 day to get a confirmation.
 					console.log(estimatedFee);
 					if (estimatedFee > 0) {
 						// Temporary fix for "stuck" transactions
@@ -385,7 +419,7 @@ var BTCWallet = (function () {
 					}
 					if ((amount + estimatedFee) > totalUnspent) {
 						alert("Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount");
-						console.log('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
+						console.error('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
 						return;
 					}
 					var changeValue = parseInt((totalUnspent - amount - estimatedFee).toString());
@@ -442,7 +476,7 @@ var BTCWallet = (function () {
 							beep(300, 4);
 						}
 						catch (e) {
-							console.error('Beep is not supported by this browser???');
+							//console.error('Beep is not supported by this browser???');
 						}
 						if (typeof callback == typeof Function)
 							callback(null, data);
@@ -452,10 +486,12 @@ var BTCWallet = (function () {
 			}
 			else {
 				alert("Error: You don't own that address!");
+				console.error("Error: You don't own that address!");
 			}
 		}
 		else {
 			alert('Error: Your sending or recipient address is invalid. Please check for any typos');
+			console.error('Error: Your sending or recipient address is invalid. Please check for any typos');
 		}
 	};
 	Wallet.prototype.pushTX = function (tx, callback) {
@@ -477,10 +513,14 @@ var BTCWallet = (function () {
 			success: function (data) {
 				if (data) {
 					console.log(data);
+					callback(data);
 					//var addr_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, ''));
 					//console.log(addr_data);
 					//_this.setBalance(addr_data['address'], addr_data['final_balance']);
 				}
+			},
+			error: function(data){
+				console.error(data.responseJSON);
 			}
 		});
 		/*$.post(blockchainBaseURL + '/pushtx', {hex: tx}, function (data) {

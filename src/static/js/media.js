@@ -407,10 +407,19 @@ function showPaymentOption(e) {
         if (artifactLoaded === false) {
             artifactLoaded = true;
         } else {
-        	// Overwrite btcAddress to be the local wallet
             var btcprice = makePaymentToAddress(btcAddress, price, sugPrice, function () {
                 return onPaymentDone(action, fileData);
             });
+            try {
+            	// (BTCUSD*price) converts the USD price to Satoshis.
+            	sentFunds = false;
+            	watchForLocalWalletPayment(btc_wallet.getFirstAddress(), price, function (a) {
+	                console.log(a);
+	            });
+            } catch (e) {
+            	console.log(e);
+            }
+
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(sugPrice.toFixed(2));
 
@@ -853,12 +862,15 @@ var paymentTimeout;
 var restartWebSocket = true;
 var recievedPartial = false;
 function watchForpayment(address, amount, done) {
+	console.log(address);
     done = done || function () {};
     if (amount <= 0) {
         return done(amount);
     }
 
     bitcoinWebsocket = new WebSocket("wss://ws.blockchain.info/inv");
+
+    restartWebSocket = true;
 
     bitcoinWebsocket.onopen = function(evt){
         console.log('Websocket Opened...');
@@ -894,7 +906,7 @@ function watchForpayment(address, amount, done) {
                 togglePlaybarShadow(true);
                 done(amountPaid);
 
-                restartWebSocket = false;
+                estartWebSocket = false;
                 bitcoinWebsocket.close();
             } else {
                 recievedPartial = true;
@@ -904,7 +916,7 @@ function watchForpayment(address, amount, done) {
 
     bitcoinWebsocket.onclose = function(evt){
         // Sometimes the websocket will timeout or close, when it does just respawn the thread.
-        console.log("Websocket Closed")
+        console.log("Websocket Closed");
 
         if (restartWebSocket)
             setTimeout(function(){ watchForpayment(address, amount, done); }, 200);
