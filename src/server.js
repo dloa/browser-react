@@ -20,7 +20,7 @@ app.use('/static', Express.static(path.join(__dirname, 'static')));
 
 // universal routing and rendering
 app.get('*', function(req, res) {
-	console.log(req.params);
+//	console.log(req.params);
 	match({ routes, location: req.url }, function (err, redirectLocation, renderProps) {
 		// in case of error display the error message
 		if (err) {
