@@ -736,7 +736,13 @@ function loadTrack (name, url, fname) {
 		}
         $('#audio-player').hide();
         $('#playbar-container').hide();
-        $('#embedded-file').append('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url + fname +'" /></video>'); 	}
+		if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
+	        $('#embedded-file').append('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url + fname +'" /></video>');
+		} else if (filetype == 'wav') {
+			console.log (filetype);
+	        $('#embedded-file').append('<audio id="native-player" controls="controls"><source src="'+ url + fname +'" /></audio>');
+		}
+	}
 }
 
 function togglePWYWOverlay (bool) {
