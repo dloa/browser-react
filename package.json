@@ -32,7 +32,7 @@
     "ejs": "^2.5.5",
     "express": "^4.14.1",
     "libraryd-data": "^1.0.0",
-    "oip-seo": "^1.0.3",
+    "oip-seo": "^1.0.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router": "^2.6.1"
