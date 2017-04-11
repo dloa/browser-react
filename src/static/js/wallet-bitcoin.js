@@ -56,6 +56,8 @@ function watchForLocalWalletPayment(address, amount, done) {
                 if (message.x.out[i].addr == address){
                     bitsRecieved = message.x.out[i].value;
                     console.log("Bits Recieved: " + bitsRecieved);
+                    // Now that we have recieved them add it to the local wallet
+                    btc_wallet.putUnspent(message.x.out[i]);
                 }
             }
 
@@ -75,15 +77,14 @@ function watchForLocalWalletPayment(address, amount, done) {
 				// Send the suggested price/whatever was entered into the box
 				if (!sentFunds){
 					// Add in 100 extra satoshi just in case :)
-					btc_wallet.sendCoins(btc_wallet.getFirstAddress(), btcAddress, (amount/BTCUSD) + 100, function(res){
-						console.log(res);
+					console.log(amount, BTCUSD);
+					btc_wallet.sendCoins(btc_wallet.getFirstAddress(), btcAddress, amount/BTCUSD, function(err, data){
+						if (err){
+							console.error(err);
+						}
+						console.log(data);
 						sentFunds = true;
 						restartWalletWebSocket = false;
-						for (var i = 0; i < message.x.out.length; i++){
-							if (message.x.out[i].addr == btc_wallet.getFirstAddress()){
-								btc_wallet.putUnspent(message.x.out[i]);
-							}
-						}
 						bitcoinWalletWebsocket.close();
 					});
 				}
