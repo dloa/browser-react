@@ -912,7 +912,8 @@ function watchForpayment(address, amount, done) {
                 togglePlaybarShadow(true);
                 done(amountPaid);
 
-                estartWebSocket = false;
+                restartWebSocket = false;
+                clearTimeout(pingTimerId);
                 bitcoinWebsocket.close();
             } else {
                 recievedPartial = true;
