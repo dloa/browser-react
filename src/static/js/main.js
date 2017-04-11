@@ -613,6 +613,7 @@ function resetInterface() {
 	}).hide();
 	$('#browse-media-wrap #results-count-wrap.container').hide();
     clearTimeout (window.liveRefresh);
+	clearTimeout(pingTimerId);
 }
 
 // RESET ALEXANDRIA
@@ -636,6 +637,7 @@ function resetAlexandria() {
     if (paymentTimeout) {
         clearTimeout (paymentTimeout)
     }	
+	clearTimeout(pingTimerId);
 	$('#tip-modal').css({
 			'left':'initial',
 			'right':'initial'

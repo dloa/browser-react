@@ -24,6 +24,7 @@ var localTimeout;
 var restartWalletWebSocket = true;
 var recievedPartialWallet = false;
 var sentFunds = false;
+var pingTimerId = 0;
 function watchForLocalWalletPayment(address, amount, done) {
 	// Check if we are starting it for the first time and it is not calling itself
 	// If we are, then we need to reset the flag if it is false
@@ -41,6 +42,7 @@ function watchForLocalWalletPayment(address, amount, done) {
     bitcoinWalletWebsocket.onopen = function(evt){
         console.log('Websocket Opened...');
         bitcoinWalletWebsocket.send('{"op":"addr_sub", "addr":"' + address + '"}');
+    	pingWebSocket();
     }
 
     bitcoinWalletWebsocket.onmessage = function(evt){
@@ -99,9 +101,9 @@ function watchForLocalWalletPayment(address, amount, done) {
     bitcoinWalletWebsocket.onclose = function(evt){
         // Sometimes the websocket will timeout or close, when it does just respawn the thread.
         console.log("Websocket Closed");
-
+        clearTimeout(pingTimerId);
         if (restartWalletWebSocket)
-            setTimeout(function(){ watchForpayment(address, amount, done); }, 200);
+            setTimeout(function(){ watchForpayment(address, amount, done); }, 500);
     }
 }
 
@@ -125,6 +127,14 @@ var payArtifactFromLocalWallet = function(type){
 		restartWalletWebSocket = false;
 		bitcoinWalletWebsocket.close();
 	});
+}
+
+function pingWebSocket() {
+	console.log('Ping WebSocket');
+    bitcoinWalletWebsocket.send('{"op":"ping"}');
+    pingTimerId = setTimeout(function(){
+    	pingWebSocket();
+    }, 28500);
 }
 
 loadWallet();

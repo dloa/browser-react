@@ -137,7 +137,6 @@ function makeHistory(stateObj, newTitle) {
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
 	document.title = newTitle;
-	console.info(stateObj);
 	console.log("7" + newUrl);
 	console.info(stateObj);
 	history.pushState(stateObj, newTitle, newUrl);
