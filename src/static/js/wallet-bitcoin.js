@@ -8,15 +8,15 @@ function loadWallet(){
 		console.log("Login");
 		// Login
 		btc_wallet = new BTCWallet('id', 'password');
-		btc_wallet.load();
+		btc_wallet.load(function(){
+			loadPaywallAmount();
+		});
 	} else {
 		console.log("Generate");
 		btc_wallet = new BTCWallet('id', 'password');
 		btc_wallet.generateAddress();
 	}
 }
-
-loadWallet();
 
 //KwwQzZD7enkGWswB56h1SLXjgXDAxDJsCT7r2vBZYNRyVZBiNwjS
 
@@ -104,3 +104,27 @@ function watchForLocalWalletPayment(address, amount, done) {
             setTimeout(function(){ watchForpayment(address, amount, done); }, 200);
     }
 }
+
+var loadPaywallAmount = function (){
+	console.log(btc_wallet.getTotalBalance(), BTCUSD);
+	$('#payment-select-buttons-localwallet-buy').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
+	$('#payment-select-buttons-localwallet-play').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
+}
+
+var payArtifactFromLocalWallet = function(type){
+	var btcAddress = $($('.pwyw-btc-address')[0]).text();
+
+	var amount = $($('.pwyw-btc-' + type + '-price')[0]).text();
+
+	btc_wallet.sendCoins(btc_wallet.getFirstAddress(), btcAddress, parseFloat(amount), function(err, data){
+		if (err){
+			console.error(err);
+		}
+		console.log(data);
+		sentFunds = true;
+		restartWalletWebSocket = false;
+		bitcoinWalletWebsocket.close();
+	});
+}
+
+loadWallet();

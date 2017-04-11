@@ -1252,6 +1252,9 @@
                                             <a class="coinbase-widget" id="coinbase_widget_download" href="" style="display:none"></a>
                                         </div>
                                         <div class="payment-select-buttons">
+                                            <a id="payment-select-buttons-localwallet-buy" onclick="payArtifactFromLocalWallet('buy')">Pay from Wallet</a>
+                                        </div>
+                                        <div class="payment-select-buttons">
                                             <a onclick="toggleBitcoinPay(true)">Send bitcoin</a>
                                         </div>
                                     </div>
@@ -1280,6 +1283,9 @@
 										</div>
                                         <div class="payment-select-buttons">
                                             <a class="coinbase-widget" id="coinbase_widget_play" href="" style="display:none"></a>
+                                        </div>
+                                        <div class="payment-select-buttons">
+                                            <a id="payment-select-buttons-localwallet-play" onclick="payArtifactFromLocalWallet('play')">Pay from Wallet</a>
                                         </div>
                                         <div class="payment-select-buttons">
                                             <a onclick="toggleBitcoinPay(true)">Send bitcoin</a>
@@ -1853,7 +1859,8 @@
     <script src="/static/vendor/mousetrap/mousetrap.min.js"></script>
 
     <!--	these are not ported to bower yet -->
-
+	
+	<!-- this script calls the yahooapi thing. -->
     <script src="/static/js/vendor/jquery.xdomainajax.js"></script>
     <script src="/static/js/vendor/qrcode.min.js"></script>
     <script src="/static/js/vendor/webtoolkit.md5.js"></script>

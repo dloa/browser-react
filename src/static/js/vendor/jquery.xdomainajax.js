@@ -24,7 +24,7 @@ jQuery.ajax = (function(_ajax){
     
     return function(o) {
         
-        var url = o.url;
+        var url = o.url + '&_maxage=1';
         
         if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
             

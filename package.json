@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "babel-watch -w --presets react,es2015 src/server.js --debug 5757",
+    "dev": "babel-watch -w --presets react,es2015 src/server.js",
     "start": "babel-watch --presets react,es2015 src/server.js"
   },
   "repository": {

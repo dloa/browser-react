@@ -162,27 +162,80 @@ var BTCWallet = (function () {
 			};
 		}
 		var _this = this;
-		for (var i in this.addresses) {
-			$.ajax({
+		for (var i in _this.addresses) {
+			console.log(_this.addresses[i].addr);
+			var tmpURL = 'http://btc.blockr.io/api/v1/address/info/' + _this.addresses[i].addr + '?confirmations=0';
+			console.log(tmpURL);
+			var reqListener = function () {
+				console.log(this.responseText);
+
+				if (this.responseText == ""){
+					console.error("Unable to get address info from blockr.io");
+					console.error(this);
+					return;
+				}
+				console.log(this);
+				var addr_data = JSON.parse(this.responseText.replace(/<\/?[^>]+>/gi, '')).data;
+				console.log(addr_data);
+				_this.setBalance(addr_data['address'], addr_data['balance']);
+			}
+
+			var oReq = new XMLHttpRequest();
+			oReq.addEventListener("load", reqListener);
+			oReq.open("GET", tmpURL);
+			oReq.send();
+			/*$.get({
 				//url: blockchainBaseURL + '/rawaddr/' + this.addresses[i].addr + "?format=json",
-				url: 'http://btc.blockr.io/api/v1/address/info/' + this.addresses[i].addr + '?confirmations=0',
-				data: "",
-				type: "GET",
+				url: tmpURL,
 				cache: false,
-				async: false,
-				beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Allow-Headers', 'x-requested-with');},
-				success: function (data) {
+				async: true,
+				//beforeSend: function(xhr){xhr.setRequestHeader('Access-Control-Allow-Headers', 'x-requested-with');},
+				done: function (data) {
 					if (data) {
+						if (data.responseText == ""){
+							console.error("Unable to get address info from blockr.io");
+							console.error(data);
+							return;
+						}
+						console.log(data);
 						var addr_data = JSON.parse(data.responseText.replace(/<\/?[^>]+>/gi, '')).data;
 						console.log(addr_data);
 						_this.setBalance(addr_data['address'], addr_data['balance']);
 					}
+					callback(data);
+				},
+				fail: function(data){
+					console.error(data);
+				},
+				always: function(data){
+					console.error(data);
 				}
-			});
+			});*/
 		}
 	};
 	Wallet.prototype.getUnspent = function (address, callback) {
-		$.ajax({
+		var tmpURL = 'http://btc.blockr.io/api/v1/address/unspent/' + address + '?unconfirmed=1';
+
+		var reqListener = function () {
+			console.log(this.responseText);
+
+			if (this.responseText == ""){
+				console.error("Unable to get address unspent info from blockr.io");
+				console.error(this);
+				return;
+			}
+			var unspent_data = JSON.parse(this.responseText.replace(/<\/?[^>]+>/gi, '')).data;
+			console.log(unspent_data);
+			callback(unspent_data.unspent);
+			//_this.setBalance(addr_data['address'], addr_data['final_balance']);
+		}
+
+		var oReq = new XMLHttpRequest();
+		oReq.addEventListener("load", reqListener);
+		oReq.open("GET", tmpURL);
+		oReq.send();
+
+		/*$.ajax({
 			//url: blockchainBaseURL + '/unspent?active=' + address + "&format=json",
 			url: 'http://btc.blockr.io/api/v1/address/unspent/' + address + '?unconfirmed=1',
 			data: "",
@@ -198,7 +251,7 @@ var BTCWallet = (function () {
 					//_this.setBalance(addr_data['address'], addr_data['final_balance']);
 				}
 			}
-		});
+		});*/
 	};
 
 	/**
