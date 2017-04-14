@@ -373,6 +373,11 @@ function showPaymentOption(e) {
 
         console.log(fileData);
 
+        // Try to load in balance for local btc wallet
+        try {
+        	loadPaywallWalletInfo();
+        } catch (e) { console.log(e); }
+
         // Check if we are the play or download button
         if ($(self).closest('td').hasClass('tb-price-download') || $(self).closest('li').hasClass('pwyw-action-download') || $(self).closest('tbody').hasClass('playlist-extra-files')){
             actionElement = $('.pwyw-activate-download');
@@ -916,6 +921,7 @@ function watchForpayment(address, amount, done) {
                 clearTimeout(pingTimerId);
                 bitcoinWebsocket.close();
             } else {
+            	console.log("Recieved partial transaction, not unlocking.");
                 recievedPartial = true;
             }
         }

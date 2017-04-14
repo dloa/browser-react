@@ -360,6 +360,17 @@ var BTCWallet = (function () {
 				}
 			}
 		}
+		for (var v = 0; v < this.known_unspent.length; v++){
+			if (CurrentAmount > (amount + 2005) / Math.pow(10,8)) {
+				 break;
+			} else {
+				CurrentAmount += (this.known_unspent[v].value / Math.pow(10,8));
+				var tmp = this.known_unspent[v];
+				// Convert value to amount
+				tmp.amount = tmp.value;
+				CutUnspent.push(tmp);
+			}
+		}
 		console.log((amount + 2005) / Math.pow(10,8));
 		console.log(CurrentAmount, CutUnspent);
 		if (CurrentAmount < (amount + 2005) / Math.pow(10,8)) {
@@ -428,6 +439,13 @@ var BTCWallet = (function () {
 			if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
 				this.refreshBalances();
 				console.log(this.balances[fromAddress], amount);
+				if (this.balances[fromAddress] == 0){
+					var bal = 0;
+					for (var i = 0; i < this.known_unspent.length; i++){
+						bal += (this.known_unspent[i].value / Math.pow(10, 8));
+					}
+					this.balances[fromAddress] = bal;
+				}
 				if (this.balances[fromAddress] < amount) {
 					alert("You don't have enough coins to do that");
 					console.error("You don't have enough coins to do that", this.balances[fromAddress], amount);

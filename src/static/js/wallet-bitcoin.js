@@ -9,7 +9,7 @@ function loadWallet(){
 		// Login
 		btc_wallet = new BTCWallet('id', 'password');
 		btc_wallet.load(function(){
-			loadPaywallAmount();
+			loadPaywallWalletInfo();
 		});
 	} else {
 		console.log("Generate");
@@ -28,7 +28,7 @@ var pingTimerId = 0;
 function watchForLocalWalletPayment(address, amount, done) {
 	// Check if we are starting it for the first time and it is not calling itself
 	// If we are, then we need to reset the flag if it is false
-	if (restartWalletWebSocket == false)
+	if (!restartWalletWebSocket)
 		restartWalletWebSocket = true;
 
 	console.log(address);
@@ -59,6 +59,8 @@ function watchForLocalWalletPayment(address, amount, done) {
                     bitsRecieved = message.x.out[i].value;
                     console.log("Bits Recieved: " + bitsRecieved);
                     // Now that we have recieved them add it to the local wallet
+                    // Assign the tx hash to the unspent as well :)
+                    message.x.out[i].tx = message.x.hash;
                     btc_wallet.putUnspent(message.x.out[i]);
                 }
             }
@@ -100,14 +102,15 @@ function watchForLocalWalletPayment(address, amount, done) {
 
     bitcoinWalletWebsocket.onclose = function(evt){
         // Sometimes the websocket will timeout or close, when it does just respawn the thread.
+        console.log(evt);
         console.log("Websocket Closed");
         clearTimeout(pingTimerId);
         if (restartWalletWebSocket)
-            setTimeout(function(){ watchForpayment(address, amount, done); }, 500);
+            setTimeout(function(){ watchForLocalWalletPayment(address, amount, done); }, 200);
     }
 }
 
-var loadPaywallAmount = function (){
+var loadPaywallWalletInfo = function (){
 	console.log(btc_wallet.getTotalBalance(), BTCUSD);
 	$('#payment-select-buttons-localwallet-buy').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
 	$('#payment-select-buttons-localwallet-play').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
