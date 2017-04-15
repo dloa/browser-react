@@ -308,8 +308,8 @@ function applyMediaData(data) {
     if(!xinfo['files'][0].disallowBuy && xinfo['files'][0].sugBuy) {
     	$('#audio-player').hide();
     	$('.pwyw-action-download').show();
-	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy/priceScale.toFixed(3))
-	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy/priceScale.toFixed(3))
+	    $('.pwyw-price-download').text((xinfo['files'][0].sugBuy/priceScale).toFixed(3))
+	    $('.pwyw-price-suggest-download').text((xinfo['files'][0].sugBuy/priceScale).toFixed(3))
     } else {
     	$('.pwyw-action-download').hide();
     }
