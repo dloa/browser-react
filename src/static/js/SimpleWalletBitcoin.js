@@ -164,7 +164,7 @@ var BTCWallet = (function () {
 		var _this = this;
 		for (var i in _this.addresses) {
 			console.log(_this.addresses[i].addr);
-			var tmpURL = 'http://btc.blockr.io/api/v1/address/info/' + _this.addresses[i].addr + '?confirmations=0';
+			var tmpURL = window.location.protocol+'//btc.blockr.io/api/v1/address/info/' + _this.addresses[i].addr + '?confirmations=0';
 			console.log(tmpURL);
 			var reqListener = function () {
 				console.log(this.responseText);
