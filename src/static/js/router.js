@@ -168,16 +168,23 @@ function router (event, goUrl) {
 					var searchOn = paths[2].replace("-","_");
 					if (searchOn.length == 6 || searchOn.length == 64) {
 
-						// We can just pass in the txid and it will look it up from there.
-						loadArtifactView2(searchOn);
+		    			var moduleSlice = module.length -1;
+		    			if ( module.slice(0, -moduleSlice) == 'F') {
+		    				console.log('Publisher');
+							searchResults = searchAPI('publisher', 'address', searchOn);
+							loadPublisherView(searchOn);
+						} else {
+							// We can just pass in the txid and it will look it up from there.
+							loadArtifactView2(searchOn);
 
-						var stateObj = {
-							currentView: 'media',
-							searchResults: false,
-							isFront: true,
-							directToMedia: fixPaths // This is only true if we browsed directly to the media. This is set above when we maniupalate the Paths variable.				
+							var stateObj = {
+								currentView: 'media',
+								searchResults: false,
+								isFront: true,
+								directToMedia: fixPaths // This is only true if we browsed directly to the media. This is set above when we maniupalate the Paths variable.				
+							}
+							makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 						}
-						makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 					} else {
 						console.info(paths);
 						if ( (paths[2] == 'type') && (paths[3]) ) {
