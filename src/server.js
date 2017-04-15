@@ -61,7 +61,14 @@ app.get('*', function(req, res) {
 					else //OIP
 						artifact = data[0]['oip-041'].artifact;
 
-					var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> .video { width:100%; height:auto; }</style><div class="video"><video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video></div></body></html>';
+					console.log(artifact);
+					var playerEmbed = '';
+					if (artifact.type == 'music') {
+						playerEmbed = '<audio class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
+					} else {
+						playerEmbed = '<video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
+					}
+					var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> .video { width:100%; height:auto; }</style><div class="'+artifact.type+'">'+playerEmbed+'</div></body></html>';
 					
 					return res.send(container);
 				});

@@ -297,10 +297,10 @@ function applyMediaData(data) {
         track: xinfo['files'][0],
         name: xinfo['files'][0].dname,
         url: IPFSUrl([xinfo['DHT Hash'], xinfo['files'][0].fname]),
-        sugPlay: ((xinfo['files'][0].sugPlay)/priceScale),
-        minPlay: ((xinfo['files'][0].minPlay)/priceScale),
-        sugBuy: ((xinfo['files'][0].sugBuy)/priceScale),
-        minBuy: ((xinfo['files'][0].minBuy)/priceScale),
+        sugPlay: xinfo['files'][0].sugPlay,
+        minPlay: xinfo['files'][0].minPlay,
+        sugBuy: xinfo['files'][0].sugBuy,
+        minBuy: xinfo['files'][0].minBuy,
         type: xinfo['files'][0].type
     };
     console.info(mainFile);
