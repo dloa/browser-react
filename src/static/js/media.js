@@ -270,18 +270,28 @@ function applyMediaData(data) {
 	// Fix prices where some are missing
 	xinfo['files'].forEach( function (file) {
 		console.info(file);
-		if ((!file.sugPlay) && (file.minPlay > 0)) {
-			file.sugPlay = file.minPlay;
-		}
-		if ((!file.sugBuy) && (file.minBuy > 0)) {
-			file.sugBuy = file.minBuy;
-		}
-		if ((!file.minPlay) && (file.sugPlay > 0)) {
-			file.minPlay = file.sugPlay;
-		}
-		if ((!file.minBuy) && (file.sugBuy > 0)) {
-			file.minBuy = file.sugBuy;
-		}
+        if ((file.sugPlay) || (file.minPlay)) {
+    		if ((!file.sugPlay) && (file.minPlay > 0)) {
+    			file.sugPlay = file.minPlay;
+    		}
+            if ((!file.minPlay) && (file.sugPlay > 0)) {
+                file.minPlay = file.sugPlay;
+            }
+        } else {
+            file.sugPlay = 0;
+            file.minPlay = 0;
+        }
+        if ((file.sugBuy) || (file.minBuy)) {
+    		if ((!file.sugBuy) && (file.minBuy > 0)) {
+    			file.sugBuy = file.minBuy;
+    		}
+    		if ((!file.minBuy) && (file.sugBuy > 0)) {
+    			file.minBuy = file.sugBuy;
+    		}
+        } else {
+            file.sugBuy = 0;
+            file.minBuy = 0;
+        }
 	});
     mainFile = {
         track: xinfo['files'][0],
