@@ -130,7 +130,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         // Only add files to the main playlist where type matches artifact type.
 	// Extra files get added to a separate table
         // ToDo: Check for all different file types once implemented
-        if (file.type != artifactType) {
+        if ( (file.type) && (file.type != artifactType) && (file.type != 'tip') ) {
 		extraFiles.append("<tr>" +
 		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
 		          tdBuy +
@@ -230,7 +230,10 @@ function applyMediaData(data) {
     if (!xinfo['files']) {
     	xinfo['files'] = [];
 		var i = 0;
+	    console.log(media.type);
+	    console.info(tracks);
 		tracks.forEach( function (file) {
+			console.info(file);
 			xinfo['files'][i] = {
 				fname: file,
 				runtime: xinfo['runtime'],
@@ -238,10 +241,12 @@ function applyMediaData(data) {
 				sugBuy: 0,
 				minPlay: 0,
 				sugPlay: 0,
+				type: media.type
 			}
-			if (payment) {
-				xinfo['files'][i]['type'] = payment['type'];
-			}
+//		Account for old payment details
+//			if (payment) {
+//				xinfo['files'][i]['type'] = payment['type'];
+//			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
 				xinfo['files'][i]['sugBuy'] = parseFloat(pwywArray[0]);
@@ -255,7 +260,24 @@ function applyMediaData(data) {
 			i++
 		});
 	}
+	console.info(xinfo['files']);
 	console.log (priceScale);
+	// Fix prices where some are missing
+	xinfo['files'].forEach( function (file) {
+		console.info(file);
+		if ((!file.sugPlay) && (file.minPlay > 0)) {
+			file.sugPlay = file.minPlay;
+		}
+		if ((!file.sugBuy) && (file.minBuy > 0)) {
+			file.sugBuy = file.minBuy;
+		}
+		if ((!file.minPlay) && (file.sugPlay > 0)) {
+			file.minPlay = file.sugPlay;
+		}
+		if ((!file.minBuy) && (file.sugBuy > 0)) {
+			file.minBuy = file.sugBuy;
+		}
+	});
     mainFile = {
         track: xinfo['files'][0],
         name: xinfo['files'][0].dname,
@@ -263,8 +285,10 @@ function applyMediaData(data) {
         sugPlay: ((xinfo['files'][0].sugPlay)/priceScale),
         minPlay: ((xinfo['files'][0].minPlay)/priceScale),
         sugBuy: ((xinfo['files'][0].sugBuy)/priceScale),
-        minBuy: ((xinfo['files'][0].minBuy)/priceScale)
+        minBuy: ((xinfo['files'][0].minBuy)/priceScale),
+        type: xinfo['files'][0].type
     };
+    console.info(mainFile);
     filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
     mediaDataSel.data(media)
 
@@ -308,6 +332,8 @@ function applyMediaData(data) {
 	    $('.media-cover').hide();
 		$('.media-info').css('width','100%');
 	}
+
+	console.info (xinfo['files']);
 
     renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'), media['type'], $('.playlist-extra-files'));
 
@@ -788,6 +814,7 @@ function onPaymentDone (action, file) {
     if (!fileType) {
     	fileType = history.state.mediaType;
     }
+    console.log(fileType);
 	var fileName = file.track.fname;
 	var trackPath = file.url.slice(0, '-'+ encodeURI(fileName).length);
     if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
