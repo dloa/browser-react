@@ -13,7 +13,6 @@ function fullSearch(searchFor) {
 	if (!publisherResults) {
 		publisherResults = searchAPI('publisher', 'name', searchFor);
 	}
-	console.info(publisherResults);
 	var mediaResults = searchAPI('media', '*', searchFor);
 	$('#adv-search').fadeOut(fadeTimer);
 	var stateObj = {

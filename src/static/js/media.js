@@ -132,25 +132,28 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         // Only add files to the main playlist where type matches artifact type.
 	// Extra files get added to a separate table
         // ToDo: Check for all different file types once implemented
-        if ( (file.type) && (file.type != artifactType) && (file.type != 'tip') ) {
-		extraFiles.append("<tr>" +
-		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
-		          tdBuy +
-		          "</tr>");
-		var trackEl = extraFiles.children().last();
-		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
-	} else {
-
-		el.append("<tr><td>" + i++ + "</td>" +
-		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
-		          "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
-		          "<td>" + (file.runtime ? secondsToPrettyString(parseInt(file.runtime), true) : "") + "</td>" +
-		          tdPlay +
-		          tdBuy +
-		          "</tr>");
-		var trackEl = el.children().last();
-		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
-	}
+        if ( (file.type) && (file.type != artifactType) ) {
+    		extraFiles.append("<tr>" +
+    		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
+    		          tdBuy +
+    		          "</tr>");
+    		var trackEl = extraFiles.children().last();
+    		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
+    	} else {
+            var fileRuntime = file.runtime;
+            if (!file.runtime) {
+                fileRuntime = file.duration;
+            }
+    		el.append("<tr><td>" + i++ + "</td>" +
+    		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
+    		          "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
+    		          "<td>" + (fileRuntime ? secondsToPrettyString(parseInt(fileRuntime), true) : "") + "</td>" +
+    		          tdPlay +
+    		          tdBuy +
+    		          "</tr>");
+    		var trackEl = el.children().last();
+    		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
+    	}
     });
     if (extraFiles.children().length < 1) {
         extraFiles.parent().hide();
