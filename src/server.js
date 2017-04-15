@@ -56,19 +56,21 @@ app.get('*', function(req, res) {
 					var artifact = '';
 
 					// alexandria-media
-					if (data[0]['media-data'])
+					if (data[0]['media-data']) {
 						artifact = data[0]['media-data']['alexandria-media'];
-					else //OIP
-						artifact = data[0]['oip-041'].artifact;
+					} else {
+						var artifactOIP = conformOIP(data[0]);
+						artifact = artifactOIP['media-data']['alexandria-media'];
+						artifact.info['extra-info'].filename = artifact.info['extra-info'].files[0].fname;
+					}
 
-					console.log(artifact);
 					var playerEmbed = '';
 					if (artifact.type == 'music') {
-						playerEmbed = '<audio class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
+						playerEmbed = '<audio class="audio" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
 					} else {
 						playerEmbed = '<video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
 					}
-					var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> .video { width:100%; height:auto; }</style><div class="'+artifact.type+'">'+playerEmbed+'</div></body></html>';
+					var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> audio, video { width:100%; height:auto; }</style><div class="'+artifact.type+'">'+playerEmbed+'</div></body></html>';
 					
 					return res.send(container);
 				});
@@ -101,6 +103,64 @@ app.get('*', function(req, res) {
 		}
 	});
 });
+
+function conformOIP(oipObject){
+	// Pull out of casing
+	var oip = oipObject["oip-041"];
+
+	var alexandriaObject = {  
+		"media-data":{  
+			"alexandria-media":{  
+				"torrent": oip.artifact.storage.location,
+				"publisher": oip.artifact.publisher,
+				"timestamp": oip.artifact.timestamp*1000,
+				"type": oip.artifact.type,
+				"info": {  
+					"title": oip.artifact.info.title,
+					"description":oip.artifact.info.description,
+					"year": oip.artifact.info.year,
+					"extra-info": oip.artifact.info.extraInfo ? oip.artifact.info.extraInfo : oip.artifact.info['extra-info']
+				},
+				"payment":oip.artifact.payment
+			},
+			"signature":oip.signature
+		},
+		"txid": oipObject.txid,
+		"block": oipObject.block
+	}
+
+	alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"]["DHT Hash"] = oip.artifact.storage.location;
+
+	// Add artist name if it exists to the "publisher-name" for now. This is a hack as oip-041 standards do not include a publisher name. This might need to be updated in LibraryD to be included.
+	if (oip.artifact.info.extraInfo && oip.artifact.info.extraInfo.artist){
+		alexandriaObject['publisher-name'] = oip.artifact.info.extraInfo.artist;
+	}
+
+	if(oip.artifact.info['extra-info'] && oip.artifact.info['extra-info'].artist){
+		alexandriaObject['publisher-name'] = oip.artifact.info['extra-info'].artist;
+	}
+
+	// Conform each file to be fixed.
+	// Add files.
+	if (oip.artifact.storage.files){
+		var files = oip.artifact.storage.files;
+		for (var i = 0; i < files.length; i++) {
+			if (files[i].filename && !files[i].fname){
+				files[i].fname = files[i].filename;
+				delete files[i].filename;
+			}
+			if (files[i].displayname && !files[i].dname){
+				files[i].dname = files[i].displayname;
+				delete files[i].displayname;
+			}
+		}
+
+		alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"].files = [];
+		alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"].files = files;
+	}
+
+	return alexandriaObject;
+}
 
 // start the server
 const port = process.env.PORT || 3000;
