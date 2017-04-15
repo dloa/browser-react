@@ -41,6 +41,8 @@ function loadArtifactView2(objMeta) {
     if (thisMediaData[0]['media-data']['alexandria-media']['payment']) {
         if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
             priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
+        } else {
+        	priceScale = 1;
         }
     }
     console.log (mediaID, thisMediaData);
@@ -116,7 +118,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowPlay && file.disallowPlay === true) {
             tdPlay = "<td class=\"price disabled\"><span>$<span class=\"price\">N/A</span></span></td>";
         } else {
-            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? (file.sugPlay/priceScale).toFixed(2) : "Free!") + "</span></span></td>";
+            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? (file.sugPlay/priceScale).toFixed(3) : "Free!") + "</span></span></td>";
         }
 
         // Setup cell for price to buy, N/A when disallowBuy === true
@@ -124,7 +126,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowBuy && file.disallowBuy === true) {
             tdBuy = "<td class=\"price disabled\"><span>$<span class=\"price\"><span>N/A</span></span></td>";
         } else {
-            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? (file.sugBuy/priceScale).toFixed(2) : "Free!") + "</span></span></td>";
+            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? (file.sugBuy/priceScale).toFixed(3) : "Free!") + "</span></span></td>";
         }
 
         // Only add files to the main playlist where type matches artifact type.
@@ -249,9 +251,9 @@ function applyMediaData(data) {
 //			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
-				xinfo['files'][i]['sugBuy'] = parseFloat(pwywArray[0]);
-				xinfo['files'][i]['sugPlay'] = parseFloat(pwywArray[1]);
-				xinfo['files'][i]['minBuy'] = parseFloat(pwywArray[1]);
+				xinfo['files'][i]['sugBuy'] = parseFloat(pwywArray[0])/100;
+				xinfo['files'][i]['sugPlay'] = parseFloat(pwywArray[1])/100;
+				xinfo['files'][i]['minBuy'] = parseFloat(pwywArray[1])/100;
 			} else {
 				xinfo['files'][i]['sugBuy'] = 0;
 				xinfo['files'][i]['sugPlay'] =  0;
@@ -295,16 +297,16 @@ function applyMediaData(data) {
     // Set what the circles will use for pricing.
     if(!xinfo['files'][0].disallowPlay && xinfo['files'][0].sugPlay) {
     	$('.pwyw-action-play').show();
-	    $('.pwyw-price-play').text((xinfo['files'][0].sugPlay/priceScale).toFixed(2));
-	    $('.pwyw-price-suggest-play').text((xinfo['files'][0].sugPlay/priceScale).toFixed(2));
+	    $('.pwyw-price-play').text((xinfo['files'][0].sugPlay/priceScale).toFixed(3));
+	    $('.pwyw-price-suggest-play').text((xinfo['files'][0].sugPlay/priceScale).toFixed(3));
     } else {
     	$('.pwyw-action-play').hide();
     }
     if(!xinfo['files'][0].disallowBuy && xinfo['files'][0].sugBuy) {
     	$('#audio-player').hide();
     	$('.pwyw-action-download').show();
-	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy/priceScale)
-	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy/priceScale)
+	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy/priceScale.toFixed(3))
+	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy/priceScale.toFixed(3))
     } else {
     	$('.pwyw-action-download').hide();
     }
@@ -452,7 +454,7 @@ function showPaymentOption(e) {
             }
 
             $('.pwyw-btc-' + action + '-price').text(btcprice);
-            $('.pwyw-usd-' + action + '-price-input').val(sugPrice.toFixed(2));
+            $('.pwyw-usd-' + action + '-price-input').val(sugPrice.toFixed(3));
 
             $('.pwyw-container').removeClass('active');
             actionElement.addClass('active');

@@ -308,7 +308,7 @@
 .playlist-table span.price
 /* fifth column: Price/Play */
 {
-    padding: 0 20px;
+    padding: 0 .5em;
     border-radius: 4px;
     background: lightgrey;
     font-weight: bold;
