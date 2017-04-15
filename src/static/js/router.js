@@ -170,8 +170,8 @@ function router (event, goUrl) {
 
 		    			var moduleSlice = module.length -1;
 		    			if ( module.slice(0, -moduleSlice) == 'F') {
-		    				console.log('Publisher');
 							searchResults = searchAPI('publisher', 'address', searchOn);
+							searchOn = searchResults[0]['publisher-data']['alexandria-publisher']['address'];
 							loadPublisherView(searchOn);
 						} else {
 							// We can just pass in the txid and it will look it up from there.
