@@ -56,12 +56,21 @@ function watchForLocalWalletPayment(address, amount, done) {
 
             for (var i = 0; i < message.x.out.length; i++) {
                 if (message.x.out[i].addr == address){
-                    bitsRecieved = message.x.out[i].value;
-                    console.log("Bits Recieved: " + bitsRecieved);
-                    // Now that we have recieved them add it to the local wallet
-                    // Assign the tx hash to the unspent as well :)
-                    message.x.out[i].tx = message.x.hash;
-                    btc_wallet.putUnspent(message.x.out[i]);
+                	var alreadyInUnspent = false;
+                	for (var v = 0; v < btc_wallet.known_unspent.length; v++){
+                		if (btc_wallet.known_unspent[v] && btc_wallet.known_unspent[v].txid){
+                			if (btc_wallet.known_unspent[v].txid == mexxage.x.hash)
+                				alreadyInUnspent = true;
+                		}
+                	}
+                	if (!alreadyInUnspent){
+						bitsRecieved = message.x.out[i].value;
+						console.log("Bits Recieved: " + bitsRecieved);
+						// Now that we have recieved them add it to the local wallet
+						// Assign the tx hash to the unspent as well :)
+						message.x.out[i].tx = message.x.hash;
+						btc_wallet.putUnspent(message.x.out[i]);
+                	}
                 }
             }
 

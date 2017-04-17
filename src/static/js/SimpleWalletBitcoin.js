@@ -451,11 +451,35 @@ var BTCWallet = (function () {
 					var bal = 0;
 					var unspentTmp = this.known_unspent;
 					var clean_unspent = this.removeSpent(unspentTmp);
+					var addedToBal = [];
 					for (var i = 0; i < clean_unspent.length; i++){
-						if (clean_unspent && clean_unspent[i] && clean_unspent[i].value)
+						for (var b = 0; b < addedToBal.length; b++) {
+							if (addedToBal[b] && addedToBal[b].tx){
+								if (clean_unspent[i] && clean_unspent[i].tx){
+									if (addedToBal[b].tx == clean_unspent[i].tx)
+										continue;
+								} else if (clean_unspent[i] && clean_unspent[i].txid) {
+									if (addedToBal[b].tx == clean_unspent[i].txid)
+										continue;
+								}
+							} else if (addedToBal[b] && addedToBal[b].txid) {
+								if (clean_unspent[i] && clean_unspent[i].tx){
+									if (addedToBal[b].txid == clean_unspent[i].tx)
+										continue;
+								} else if (clean_unspent[i] && clean_unspent[i].txid) {
+									if (addedToBal[b].txid == clean_unspent[i].txid)
+										continue;
+								}
+							}
+						}
+						if (clean_unspent && clean_unspent[i] && clean_unspent[i].value){
 							bal += clean_unspent[i].value/Math.pow(10,8);
-						else if (clean_unspent && clean_unspent[i] && clean_unspent[i].amount)
+							addedToBal.push(clean_unspent[i]);
+						}
+						else if (clean_unspent && clean_unspent[i] && clean_unspent[i].amount){
 							bal += clean_unspent[i].amount;
+							addedToBal.push(clean_unspent[i]);
+						}
 					}
 					this.balances[fromAddress] = bal;
 				}
