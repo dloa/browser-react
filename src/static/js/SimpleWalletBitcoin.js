@@ -214,7 +214,7 @@ var BTCWallet = (function () {
 		}
 	};
 	Wallet.prototype.getUnspent = function (address, callback) {
-		var tmpURL = 'http://btc.blockr.io/api/v1/address/unspent/' + address + '?unconfirmed=1';
+		var tmpURL = window.location.protocol + '//btc.blockr.io/api/v1/address/unspent/' + address + '?unconfirmed=1';
 
 		var reqListener = function () {
 			console.log(this.responseText);
@@ -585,7 +585,7 @@ var BTCWallet = (function () {
 		}
 		var _this = this;
 		$.ajax({
-			url: 'http://btc.blockr.io/api/v1/tx/push',
+			url: window.location.protocol + '//btc.blockr.io/api/v1/tx/push',
 			data: {hex: tx},
 			type: "POST",
 			headers: {
