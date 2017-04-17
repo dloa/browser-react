@@ -364,11 +364,19 @@ var BTCWallet = (function () {
 			if (CurrentAmount > (amount + 2005) / Math.pow(10,8)) {
 				 break;
 			} else {
-				CurrentAmount += (this.known_unspent[v].value / Math.pow(10,8));
-				var tmp = this.known_unspent[v];
-				// Convert value to amount
-				tmp.amount = tmp.value;
-				CutUnspent.push(tmp);
+				if (this.known_unspent && this.known_unspent[v] && this.known_unspent[v].value){
+					CurrentAmount += (this.known_unspent[v].value / Math.pow(10,8));
+					var tmp = this.known_unspent[v];
+					// Convert value to amount
+					if (!tmp.amount){
+						// Make sure to save amount as the value in full BTC and NOT satoshi
+						tmp.amount = tmp.value / Math.pow(10,8);
+					}
+					CutUnspent.push(tmp);
+				} else if (this.known_unspent && this.known_unspent[v] && this.known_unspent[v].amount){
+					CurrentAmount += this.known_unspent[v].amount;
+					CutUnspent.push(this.known_unspent[v]);
+				}
 			}
 		}
 		console.log((amount + 2005) / Math.pow(10,8));
@@ -472,6 +480,11 @@ var BTCWallet = (function () {
 					console.log(unspents);
 					for (var v in unspents) {
 						// Add them regardless of if there is zero confirmations.
+						if (!unspents[v].tx){
+							if(unspents[v].txid){
+								unspents[v].tx = unspents[v].txid
+							}
+						}
 						if (unspents[v].tx && (unspents[v].n == 1 || unspents[v].n == 0)){
 							tx.addInput(unspents[v].tx, unspents[v].n);
 							_this.putSpent(unspents[v]);
@@ -528,7 +541,7 @@ var BTCWallet = (function () {
 						if (toAddress == fromAddress) {
 							_this.putUnspent({
 								address: toAddress,
-								txid: data.txid,
+								txid: data.data,
 								vout: 0,
 								confirmations: -1,
 								amount: amount / Math.pow(10, 8)
@@ -538,7 +551,7 @@ var BTCWallet = (function () {
 						if (changeValue >= minFeePerKb)
 							_this.putUnspent({
 								address: fromAddress,
-								txid: data.txid,
+								txid: data.data,
 								vout: 1,
 								confirmations: -1,
 								amount: changeValue / Math.pow(10, 8)

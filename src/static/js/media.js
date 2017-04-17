@@ -461,6 +461,7 @@ function showPaymentOption(e) {
             	sentFunds = false;
             	watchForLocalWalletPayment(btc_wallet.getFirstAddress(), price, function (a) {
 	                console.log(a);
+	                return onPaymentDone(action, fileData);
 	            });
             } catch (e) {
             	console.log(e);

@@ -83,11 +83,13 @@ function watchForLocalWalletPayment(address, amount, done) {
 					// Add in 100 extra satoshi just in case :)
 					console.log(amount, BTCUSD);
 					btc_wallet.sendCoins(btc_wallet.getFirstAddress(), btcAddress, amount/BTCUSD, function(err, data){
+
 						if (err){
 							console.error(err);
 						}
 						console.log(data);
 						sentFunds = true;
+
 						restartWalletWebSocket = false;
 						bitcoinWalletWebsocket.close();
 					});
@@ -121,14 +123,20 @@ var payArtifactFromLocalWallet = function(type){
 
 	var amount = $($('.pwyw-btc-' + type + '-price')[0]).text();
 
+	$('#payment-select-buttons-localwallet-' + type).text("Sending...").prop("disabled",true);
+
 	btc_wallet.sendCoins(btc_wallet.getFirstAddress(), btcAddress, parseFloat(amount), function(err, data){
 		if (err){
 			console.error(err);
+			return;
 		}
+		$('#payment-select-buttons-localwallet-' + type).text("Sent!").prop("disabled",false);
 		console.log(data);
 		sentFunds = true;
 		restartWalletWebSocket = false;
 		bitcoinWalletWebsocket.close();
+		var	fileData = $('.playlist tr.active').data();
+		onPaymentDone(type, fileData);
 	});
 }
 

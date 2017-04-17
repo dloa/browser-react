@@ -1031,12 +1031,12 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/src\/static\/js\/BitcoinJS-lib.js": {
+	"\/src\/static\/js\/bitcoinjs-lib.min.js": {
 		"fileType": 64,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/static\/js\/BitcoinJS-lib.js",
-		"outputAbbreviatedPath": "\/src\/static\/js\/min\/BitcoinJS-lib-min.js",
+		"inputAbbreviatedPath": "\/src\/static\/js\/bitcoinjs-lib.min.js",
+		"outputAbbreviatedPath": "\/src\/static\/js\/min\/bitcoinjs-lib.min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -1059,6 +1059,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/src\/static\/js\/coinbase.js",
 		"outputAbbreviatedPath": "\/src\/static\/js\/min\/coinbase-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/src\/static\/js\/cryptojs.min.js": {
+		"fileType": 64,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/src\/static\/js\/cryptojs.min.js",
+		"outputAbbreviatedPath": "\/src\/static\/js\/min\/cryptojs.min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
