@@ -488,6 +488,11 @@ var BTCWallet = (function () {
 								unspents[v].tx = unspents[v].txid
 							}
 						}
+						if (!unspents[v].n){
+							if(unspents[v].vout){
+								unspents[v].n = unspents[v].vout
+							}
+						}
 						if (unspents[v].tx && (unspents[v].n == 1 || unspents[v].n == 0)){
 							tx.addInput(unspents[v].tx, unspents[v].n);
 							_this.putSpent(unspents[v]);
