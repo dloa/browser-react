@@ -643,6 +643,8 @@ var BTCWallet = (function () {
 			for (var v in this.known_unspent)
 				if (this.known_unspent && this.known_unspent[v] && this.known_unspent[v].value)
 					total += this.known_unspent[v].value/Math.pow(10,8);
+				else if (this.known_unspent && this.known_unspent[v] && this.known_unspent[v].amount)
+					total += this.known_unspent[v].amount;
 		}
 		return total;
 	};
