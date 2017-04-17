@@ -475,8 +475,20 @@ function showPaymentOption(e) {
 
             // Coinbase BTC Code
             if (sugPrice < 1){
-    			$('#play-warning').show();
-    			$('#buy-warning').show();
+            	try {
+            		if ((btc_wallet.getTotalBalance() * BTCUSD) > sugPrice){
+            			$('#play-warning').hide();
+		    			$('#buy-warning').hide();
+		    		}
+		    		else {
+		    			$('#play-warning').show();
+		    			$('#buy-warning').show();
+		    		}
+            	} catch (e) {
+            		// Likely an error because btc_wallet is unset, if this happens just default to showing them :)
+            		$('#play-warning').show();
+	    			$('#buy-warning').show();
+            	}
             } else {
             	$('#play-warning').hide();
             	$('#buy-warning').hide();
@@ -620,11 +632,23 @@ function mountMediaBrowser(el, data) {
 
             // Update Coinbase modal!
             if (this.value < 1){
-                $('#play-warning').show();
-                $('#buy-warning').show();
+            	try {
+            		if ((btc_wallet.getTotalBalance() * BTCUSD) > this.value){
+            			$('#play-warning').hide();
+		    			$('#buy-warning').hide();
+		    		}
+		    		else {
+		    			$('#play-warning').show();
+		    			$('#buy-warning').show();
+		    		}
+            	} catch (e) {
+            		// Likely an error because btc_wallet is unset, if this happens just default to showing them :)
+            		$('#play-warning').show();
+	    			$('#buy-warning').show();
+            	}
             } else {
-                $('#play-warning').hide();
-                $('#buy-warning').hide();
+            	$('#play-warning').hide();
+            	$('#buy-warning').hide();
             }
             createCoinbaseModal(lastAddress, this.value, action);
         }
@@ -889,10 +913,25 @@ function makePaymentToAddress(address, minAmt, sugAmt, done) {
             lastAddress = data.input_address;
             setQR(data.input_address, USDToBTC(sugAmt));
             if (sugAmt < 1){
-    			$('#play-warning').show();
+            	try {
+            		if ((btc_wallet.getTotalBalance() * BTCUSD) > sugAmt){
+            			$('#play-warning').hide();
+		    			$('#buy-warning').hide();
+		    		}
+		    		else {
+		    			$('#play-warning').show();
+		    			$('#buy-warning').show();
+		    		}
+            	} catch (e) {
+            		// Likely an error because btc_wallet is unset, if this happens just default to showing them :)
+            		$('#play-warning').show();
+	    			$('#buy-warning').show();
+            	}
             } else {
             	$('#play-warning').hide();
+            	$('#buy-warning').hide();
             }
+
             updateCoinbaseModal(data.input_address, sugAmt);
             watchForpayment(data.input_address, minAmt, done);
         })

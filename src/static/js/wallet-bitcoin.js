@@ -114,8 +114,21 @@ function watchForLocalWalletPayment(address, amount, done) {
 
 var loadPaywallWalletInfo = function (){
 	console.log(btc_wallet.getTotalBalance(), BTCUSD);
-	$('#payment-select-buttons-localwallet-buy').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
-	$('#payment-select-buttons-localwallet-play').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
+	if (btc_wallet.getTotalBalance() > 0){
+		$('#payment-select-buttons-localwallet-buy').show();
+		$('#payment-select-buttons-localwallet-play').show();
+		// Uncomment this once Protip has been integrated.
+		//$('#install-protip-notification-buy').show();
+		//$('#install-protip-notification-play').show();
+		$('#payment-select-buttons-localwallet-buy').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
+		$('#payment-select-buttons-localwallet-play').text("Pay with Wallet ($" + (btc_wallet.getTotalBalance()*BTCUSD).toFixed(2) + ")");
+	} else {
+		// if they have no money in the wallet, just hide it
+		$('#payment-select-buttons-localwallet-buy').hide();
+		$('#payment-select-buttons-localwallet-play').hide();
+		$('#install-protip-notification-buy').hide();
+		$('#install-protip-notification-play').hide();
+	}
 }
 
 var payArtifactFromLocalWallet = function(type){
