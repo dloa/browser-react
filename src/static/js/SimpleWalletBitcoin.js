@@ -450,7 +450,10 @@ var BTCWallet = (function () {
 				if (this.balances[fromAddress] == 0){
 					var bal = 0;
 					for (var i = 0; i < this.known_unspent.length; i++){
-						bal += (this.known_unspent[i].value / Math.pow(10, 8));
+						if (this.known_unspent && this.known_unspent[i] && this.known_unspent[i].value)
+							total += this.known_unspent[i].value/Math.pow(10,8);
+						else if (this.known_unspent && this.known_unspent[i] && this.known_unspent[i].amount)
+							total += this.known_unspent[i].amount;
 					}
 					this.balances[fromAddress] = bal;
 				}
