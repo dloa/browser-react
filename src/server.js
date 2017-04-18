@@ -68,11 +68,11 @@ app.get('*', function(req, res) {
 					if (artifact.type == 'music') {
 						var coverArt = getObjects(artifact.info['extra-info']['files'], 'type', 'coverArt');
 						playerEmbed += '<img src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/'+coverArt[0].fname+'" style="float:left; margin: 4px;" width=150 height=150 />';
-						playerEmbed += '<div style="float:left; padding: 4px;">';
+						playerEmbed += '<div style="padding: 4px; line-height: 1.4">';
 						if (artifact.info['extra-info'].files[0]['dname'] != '') {
-							playerEmbed += '<h1 style="font-size:20px;margin: 0 0 5px;">'+artifact.info['extra-info'].files[0]['dname']+'</h1><h2 style="font-size:18px; font-weight: normal; margin: 0 0 5px;">'+artifact.info['title']+'</h2>';
+							playerEmbed += '<h1 style="font-size:20px;margin: 0;">'+artifact.info['extra-info'].files[0]['dname']+'</h1><h2 style="font-size:18px; font-weight: normal; margin: 0;">'+artifact.info['title']+'</h2>';
 						} else {
-							playerEmbed += '<h1 style="font-size:20px;margin: 0 0 5px;">'+artifact.info['title']+'</h1>';
+							playerEmbed += '<h1 style="font-size:20px;margin: 0;">'+artifact.info['title']+'</h1>';
 						}
 						playerEmbed += '<p style="margin:0; font-size:18px">'+artifact.info['extra-info']['artist']+'</p>';
 						playerEmbed += '</div>';
