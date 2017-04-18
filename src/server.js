@@ -65,11 +65,17 @@ app.get('*', function(req, res) {
 					}
 
 					var playerEmbed = '';
-					console.log(artifact.info['extra-info'].files[0]['dname']);
 					if (artifact.type == 'music') {
 						var coverArt = getObjects(artifact.info['extra-info']['files'], 'type', 'coverArt');
 						playerEmbed += '<img src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/'+coverArt[0].fname+'" style="float:left; margin: 4px;" width=150 height=150 />';
-						playerEmbed += '<div style="float:left; padding: 4px;"><h1 style="font-size:20px;margin: 0 0 5px;">'+artifact.info['title']+'</h1><p style="margin:0">'+artifact.info['extra-info']['artist']+'</p></div>';
+						playerEmbed += '<div style="float:left; padding: 4px;">';
+						if (artifact.info['extra-info'].files[0]['dname'] != '') {
+							playerEmbed += '<h1 style="font-size:20px;margin: 0 0 5px;">'+artifact.info['extra-info'].files[0]['dname']+'</h1><h2 style="font-size:18px; font-weight: normal; margin: 0 0 5px;">'+artifact.info['title']+'</h2>';
+						} else {
+							playerEmbed += '<h1 style="font-size:20px;margin: 0 0 5px;">'+artifact.info['title']+'</h1>';
+						}
+						playerEmbed += '<p style="margin:0; font-size:18px">'+artifact.info['extra-info']['artist']+'</p>';
+						playerEmbed += '</div>';
 						playerEmbed += '<audio class="audio" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
 					} else {
 						playerEmbed += '<video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
