@@ -696,6 +696,8 @@ function mountMediaBrowser(el, data) {
 
 	var previewImage = data['alexandria-media']['info']['extra-info']['preview'];
 	if ( (previewImage) && (artifactType === 'thing') ) {
+        $('#audio-player').hide();
+        $('#playbar-container').hide();
 		embedFile(artifactType, data['alexandria-media']['info']['extra-info']['DHT Hash'], previewImage);
 	} else {
 		$('.playlist-tracks tr:first').children(':first').click();
