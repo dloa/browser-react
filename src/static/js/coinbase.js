@@ -119,6 +119,14 @@ function updateCoinbaseModal(bitcoinAddress, amount){
 	// Coinbase enforces a minimum $1 transaction
 	if (amount < 1)
 		amount = 1;
+	// Make Coinbase try to use the Local wallet
+	var tmpBTC = bitcoinAddress;
+	try {
+		bitcoinAddress = btc_wallet.getFirstAddress();
+		console.log("Swapped Coinbase for local BTC wallet");
+	} catch (e) {
+		console.log(e);
+	}
 	// Remove the old modal
 	$('#coinbase_modal_iframe').remove();
 	// Create a new modal
