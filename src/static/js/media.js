@@ -269,7 +269,6 @@ function applyMediaData(data) {
 	console.log (priceScale);
 	// Fix prices where some are missing
 	xinfo['files'].forEach( function (file) {
-		console.info(file);
         if ((file.sugPlay) || (file.minPlay)) {
     		if ((!file.sugPlay) && (file.minPlay > 0)) {
     			file.sugPlay = file.minPlay;
@@ -303,7 +302,6 @@ function applyMediaData(data) {
         minBuy: xinfo['files'][0].minBuy,
         type: xinfo['files'][0].type
     };
-    console.info(mainFile);
     filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
     mediaDataSel.data(media)
 
@@ -516,6 +514,7 @@ function mountMediaBrowser(el, data) {
     var mediaData = applyMediaData(data);
     getUSDdayAvg();
     var artifactType = mediaData['type'];
+
     if ( (artifactType === 'video') || (artifactType === 'movie') || (artifactType === 'music') ) {
         // Prep file types that use the built-in media player
         if ( (filetype == 'mp3') || (filetype == 'm4a') || (filetype == 'flac') ) {
@@ -694,7 +693,13 @@ function mountMediaBrowser(el, data) {
 	displayEmbedCode(mediaID, mediaData.type, true);
 
 	window.scroll(0,0);
-	$('.playlist-tracks tr:first').children(':first').click();
+
+	var previewImage = data['alexandria-media']['info']['extra-info']['preview'];
+	if ( (previewImage) && (artifactType === 'thing') ) {
+		embedFile(artifactType, data['alexandria-media']['info']['extra-info']['DHT Hash'], previewImage);
+	} else {
+		$('.playlist-tracks tr:first').children(':first').click();
+	}
 
 	// MAKE HISTORY ARTIFACT VIEW
 	var stateObj = {
