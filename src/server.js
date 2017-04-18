@@ -66,11 +66,14 @@ app.get('*', function(req, res) {
 
 					var playerEmbed = '';
 					if (artifact.type == 'music') {
-						playerEmbed = '<audio class="audio" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
+						var coverArt = getObjects(artifact.info['extra-info']['files'], 'type', 'coverArt');
+						playerEmbed += '<img src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/'+coverArt[0].fname+'" style="float:left; margin: 4px;" width=150 height=150 />';
+						playerEmbed += '<div style="float:left; padding: 4px;"><strong>'+artifact.info['title']+'</strong><br />'+artifact.info['extra-info']['artist']+'</div>';
+						playerEmbed += '<audio class="audio" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
 					} else {
-						playerEmbed = '<video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
+						playerEmbed += '<video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
 					}
-					var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> audio, video { width:100%; height:auto; }</style><div class="'+artifact.type+'">'+playerEmbed+'</div></body></html>';
+					var container = '<!DOCTYPE html><html><body style="margin: 0px;"><style type="text/css"> audio, video { width:100%; height:auto; padding: 0 4px 0; box-sizing: border-box; }</style><div class="'+artifact.type+'">'+playerEmbed+'</div></body></html>';
 					
 					return res.send(container);
 				});
@@ -160,6 +163,20 @@ function conformOIP(oipObject){
 	}
 
 	return alexandriaObject;
+}
+
+// Find key:value in JSON Obj
+function getObjects(obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(getObjects(obj[i], key, val));
+        } else if (i == key && obj[key] == val) {
+            objects.push(obj);
+        }
+    }
+    return objects;
 }
 
 // start the server
