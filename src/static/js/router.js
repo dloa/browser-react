@@ -176,14 +176,6 @@ function router (event, goUrl) {
 						} else {
 							// We can just pass in the txid and it will look it up from there.
 							loadArtifactView2(searchOn);
-
-							var stateObj = {
-								currentView: 'media',
-								searchResults: false,
-								isFront: true,
-								directToMedia: fixPaths // This is only true if we browsed directly to the media. This is set above when we maniupalate the Paths variable.				
-							}
-							makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 						}
 					} else {
 						console.info(paths);

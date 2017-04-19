@@ -713,7 +713,7 @@ function mountMediaBrowser(el, data) {
 		artifactPublisher: mediaPublisher,
 		publisherId: mediaData.publisher
 	}
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
+	makeHistory(stateObj, stateObj.artifactTitle + ' | ΛLΞXΛNDRIΛ');
 }
 
 // EMBED ARTIFACT FROM DHT
