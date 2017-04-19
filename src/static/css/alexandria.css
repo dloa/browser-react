@@ -1281,7 +1281,7 @@ ul.distNetList li {
 	left: initial;
 	display: none;
 }
-#tip-modal.bubble-modal.abs, #share-modal.bubble-modal.abs {
+#view-artifact #tip-modal.bubble-modal.abs, #view-artifact #share-modal.bubble-modal.abs {
 	top: initial;
 	bottom: 100%;
 }
@@ -1330,12 +1330,12 @@ ul.distNetList li {
 	display: block;
 	width: 0;
 }
-#tip-modal.bubble-modal:before, #share-modal.bubble-modal:before {
+#view-artifact #tip-modal.bubble-modal:before, #view-artifact #share-modal.bubble-modal:before {
 	bottom:0;
 	top: 100%;
 	border-width: 16px 16px 0;
 }
-#tip-modal.bubble-modal:after, #share-modal.bubble-modal:after {
+#view-artifact #tip-modal.bubble-modal:after, #view-artifact #share-modal.bubble-modal:after {
 	bottom:0;
 	top: 100%;
 	border-width: 15px 15px 0;
