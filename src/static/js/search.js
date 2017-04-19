@@ -29,6 +29,17 @@ window.searchAPI = function(module, searchOn, searchFor) {
 		}
 
 		console.log("Conformed " + count + " OIP-041 Artifacts to alexandria-media Artifacts");
+
+		// Check for multiple txns with matching search string
+		if ((searchOn === "txid") && (mediaData.length > 1) && (searchFor.length === 8)) {
+			for (var tx = 0; tx < mediaData.length; tx++) {
+				console.info(mediaData[tx].txid);
+				if (mediaData[tx].txid.slice(0,6) != searchFor.slice(1,-1)) {
+					mediaData.splice(mediaData[tx], 1);
+				}
+			}
+		}
+
 		var sortedResults = mediaData.sort(function(a, b) {
 		    return parseFloat(a.block) - parseFloat(b.block);
 		});
