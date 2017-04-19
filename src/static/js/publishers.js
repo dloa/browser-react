@@ -94,7 +94,7 @@ function loadPublisherView(objMeta) {
 	publisherTime = new Date(publisherTime);
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
-	generateQR(publisherAddress, 'publisher-QR', 80, 80, 'florincoin');
+	generateQR(publisherAddress, 'publisher-QR', 110, 110, 'florincoin');
 	if (thisPublisherMedia) {
 		for (var i = 0; i < thisPublisherMedia.length; i++) {
 			var mediaID = thisPublisherMedia[i]['txid'];

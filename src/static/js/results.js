@@ -216,7 +216,6 @@ function populateSearchResults(results, module) {
 	$('#'+module+'-results-title').remove();
 	if ( (module =='media') && (results) ) {
 		var revs = 0;
-		console.info(results);
 		for (var i = results.length - 1; i >= 0; i--) {
 			var mediaType = results[i][1]['type'];
 			if ( (history.state) && (history.state.mediaTypes) ) {

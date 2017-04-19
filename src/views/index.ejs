@@ -344,7 +344,6 @@
         <div id="IPFS-switch" class="appOnly"></div>
     </header>
 
-	<h1>Test</h1>
     <div id="overwrite" style="display: block;"><div><%- markup -%></div></div> 
 
     <div id="intro">
@@ -1077,7 +1076,7 @@
                 <div class="row entity-meta-header">
                     <img src="" id="publisher-avatar" />
                     <div class="container">
-                        <h2 id="view-publisher-name"></h2>
+                        <h1 id="view-publisher-name"></h1>
                         <div class="entity-market">
                             <a class="tip-icon icon" onclick="loadTipModal($(this))">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="63px" height="63px" viewBox="0 0 63 63" version="1.1" class="replaced-svg">
@@ -1395,26 +1394,6 @@
                                 </tr>
                             </thead>
                             <tbody class="playlist-tracks">
-                                <tr>
-                                    <td>1</td>
-                                    <td>Tiny Human</td>
-                                    <td>Imogen Heap</td>
-                                    <td>3:39</td>
-                                    <td>$<span class="price-play">0.0125</span>
-                                    </td>
-                                    <td>$<span class="price-download">1.00</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Another Tiny Human</td>
-                                    <td>Imogen Heap</td>
-                                    <td>3:19</td>
-                                    <td><span>$0.0025</span>
-                                    </td>
-                                    <td><span>$0.040</span>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1432,6 +1411,16 @@
                                     </g>
                                 </g>
                             </svg>tip</a>
+                            <a onclick="loadShareModal($(this));" class="share-icon icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" class="replaced-svg">
+                                    <g>
+                                        <path stroke="#000000" stroke-width="4" stroke-miterlimit="10" d="M50.001,49.984"></path>
+                                        <g>
+                                            <path d="M79.636,28.404H67.001v0h-7.486c-1.382,0-2.5,1.12-2.5,2.5c0,1.381,1.118,2.5,2.5,2.5h12.366c0.002,0,0.003,0,0.005,0    h5.75v55.271H22.364V33.404h6.143h4.494h7.872c1.38,0,2.5-1.119,2.5-2.5c0-1.38-1.12-2.5-2.5-2.5h-7.872h-4.494h-8.143    c-1.65,0-3,1.35-3,3v59.271c0,1.65,1.35,3,3,3h59.271c1.65,0,3-1.35,3-3V31.404C82.636,29.754,81.286,28.404,79.636,28.404z"></path>
+                                            <path d="M34.761,23.297l12.801-9.126v46.96c0,1.348,1.093,2.439,2.439,2.439c1.348,0,2.439-1.092,2.439-2.439V14.17l12.802,9.126    c0.482,0.344,1.038,0.509,1.589,0.509c0.855,0,1.699-0.4,2.233-1.15c0.879-1.233,0.593-2.944-0.641-3.823l-16.832-12    c-0.951-0.679-2.229-0.679-3.182,0l-16.832,12c-1.232,0.879-1.52,2.59-0.641,3.823C31.815,23.888,33.526,24.175,34.761,23.297z"></path>
+                                        </g>
+                                    </g>
+                                </svg>share</a>
                     </div>
                     <!-- end .entity-market -->
                     <div class="row media-description">
@@ -1512,6 +1501,20 @@
         <h3>Share</h3>
         <p><span id="share-title"></span>
         </p>
+        <div class="share-networks">
+        	<div>
+        		<a class="twitter-share-button" href="https://twitter.com/intent/tweet" target="_blank">
+        			<img src="./static/svg/share_Twitter.svg" />
+    			</a>
+			</div>
+			<div class="fb-share-button" data-layout="icon" data-mobile-iframe="true">
+				<a class="fb-xfbml-parse-ignore" target="_blank" href="#">
+					<img src="./static/svg/share_Facebook.svg" />
+				</a>
+			</div>        	
+        	<div><a href="#" class="linkedin-share-button" target="_blank"><img src="./static/svg/share_LinkedIn.svg" /></a></div>
+        	<div><a href="#" class="reddit-share-button" target="_blank"><img src="./static/svg/share_Reddit.svg" /></a></div>
+    	</div>
         <p id="share-url-wrap"><span id="share-url" onclick="selectText('share-url');" class="selectable"></span>
         </p>
 
@@ -1861,6 +1864,8 @@
     <div id="sketchpad"></div>
 
     <div id="loaded"></div>
+	
+	<div id="fb-root"></div>
 
     <script src="/static/vendor/jquery-ui/jquery-ui.min.js"></script>
     <!--	<script src="vendor/spin.js/spin.js"></script> -->

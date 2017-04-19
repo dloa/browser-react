@@ -57,8 +57,8 @@
 .icon {
 	color: transparent;
 	cursor: pointer;
-	width: 32px;
-	height: 32px;
+	width: 36px;
+	height: 36px;
 }
 .icon svg, .icon object svg {
 	width: 100%;
@@ -72,5 +72,18 @@
 	fill: #464646;
 }
 .tip-icon svg, .tip-icon object {
-  height: 30px;
+	height: 36px;
+	margin-top: 2px;
+	width: 36px;
+}
+.share-icon {
+	margin-left: 10px;
+}
+.share-icon svg, .share-icon object {
+	width: 40px;
+	height: 40px;
+}
+.share-networks > div {
+	display: inline-block;
+	width: 36px;
 }

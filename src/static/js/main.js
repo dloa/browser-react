@@ -349,10 +349,30 @@ function loadShareModal(obj) {
 	if ($(obj).parents('.entity-market #share-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
+	// Position the share modal
 	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
-	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 91) : ($(obj).position().left - 40);
-	document.getElementById('share-url').innerHTML = location.hash.slice(2);
-	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
+	console.log($(obj).parent().width());
+	console.log($(obj).position().left);
+	var shareModalPos = (history.state.currentView == 'artifact') ? (0) : ($(obj).position().left - 40);
+	// Set URL for localhost
+	var shareURL = (location.hostname == 'localhost') ? ('https://alexandria.io/browser'+location.pathname) : (location.href);
+	var shareURLenc = encodeURIComponent(shareURL);
+	// Populate sharing content and link
+	document.getElementById('share-url').innerHTML = shareURL;
+	document.getElementById('share-title').innerHTML = $('.wrapper h1:visible').text();
+	// Twitter
+	var tweetText = 'https://twitter.com/intent/tweet?text='+ encodeURIComponent(document.getElementById('share-title').innerHTML) + '&url=' + shareURLenc + '&via=Alexandria';
+	$('.twitter-share-button').attr('href', tweetText)
+	// Facebook
+	$('.fb-share-button').attr('data-href', shareURL);
+	$('.fb-share-button a').attr('href', 'https://www.facebook.com/sharer/sharer.php?u='+shareURLenc+'&amp;src=sdkpreparse');
+	// LinkedIn
+	var linkedinURL = 'https://www.linkedin.com/shareArticle?mini=true&url='+shareURLenc+'&title='+encodeURIComponent(document.getElementById('share-title').innerHTML.slice(0,200))+'&summary='+encodeURIComponent($('.media-description:visible').text().slice(0,256))+'&source=Alexandria';
+	$('.linkedin-share-button').attr('href', linkedinURL);
+	// Reddit
+	var redditURL = 'https://www.reddit.com/submit?url=' + shareURLenc;
+	$('.reddit-share-button').attr('href', redditURL);
+	// Show the modal
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 }
 
@@ -650,6 +670,7 @@ function resetAlexandria() {
 	document.getElementById('search').style.display = 'block';
 	$('#app-shading').css('bottom','0');
 	filterMediaByType('', true);
+	window.scrollTo(0,0);
 }
 
 // RESET TIP MODAL

@@ -593,7 +593,7 @@ ul#media-type-select-list {
 	list-style: none;
 }
 #publisher-media-list {
-	margin-top: 15px;
+	margin-top: 8px;
 	clear: both;
 }
 #publisher-media-list li {
@@ -757,14 +757,9 @@ ul#media-type-select-list {
 	float: left;
 }
 #publisher-view-entity.entity-view .entity-meta-header .container > * {
-	margin: 0 0 6px;
+	margin: 0 0 7px;
 	float: left;
 	clear: left;
-	padding: 0;
-}
-#publisher-view-entity.entity-view .entity-meta-header .container .entity-market {
-	clear: none;
-	margin-left: 1.25em;
 }
 #publisher-view-entity.entity-view .entity-meta-header #publisher-QR {
 	float: right;
@@ -828,12 +823,9 @@ img.poster-frame {
 }
 .row.entity-market {
 	float: right;
-	height: 32px;
-	line-height: 32px;
-	margin: .75em 0 .75em 15px;
-}
-.entity-market .share-icon svg {
-	width: 32px;
+	height: 36px;
+	line-height: 36px;
+	margin: .5em 15px 15px;
 }
 .row.entity-market svg {
 	vertical-align: top;
@@ -1289,7 +1281,7 @@ ul.distNetList li {
 	left: initial;
 	display: none;
 }
-#tip-modal.bubble-modal.abs {
+#tip-modal.bubble-modal.abs, #share-modal.bubble-modal.abs {
 	top: initial;
 	bottom: 100%;
 }
@@ -1338,12 +1330,12 @@ ul.distNetList li {
 	display: block;
 	width: 0;
 }
-#tip-modal.bubble-modal:before {
+#tip-modal.bubble-modal:before, #share-modal.bubble-modal:before {
 	bottom:0;
 	top: 100%;
 	border-width: 16px 16px 0;
 }
-#tip-modal.bubble-modal:after {
+#tip-modal.bubble-modal:after, #share-modal.bubble-modal:after {
 	bottom:0;
 	top: 100%;
 	border-width: 15px 15px 0;
@@ -1369,9 +1361,6 @@ ul.distNetList li {
 	width: 80%;
 	margin-bottom: 1em;
 	text-align: left;
-}
-.tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
-	color: #919191;
 }
 #tip-modal .tip-qr-wrap {
 	width: 100px;
@@ -1452,7 +1441,6 @@ ul.distNetList li {
 }
 #tip-modal .modal-tab p, #pwyw-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content, #info-modal-small {
 	line-height: 1.4;
-	color: #919191;
 	font-size: .9em;
 }
 .info-modal .entity-meta-content, .info-modal .media-desc {
