@@ -36,6 +36,15 @@ function loadArtifactView2(objMeta) {
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 
+    // Check for multiple txns with matching search string
+    if ((thisMediaData.length > 1) && (mediaID.length === 6)) {
+        for (var tx = 0; tx < thisMediaData.length; tx++) {
+            if (thisMediaData[tx].txid.slice(0,6) != mediaID) {
+                thisMediaData.splice(thisMediaData[tx], 1);
+            }
+        }
+    }
+
 	console.info(thisMediaData);
 
     if (thisMediaData[0]['media-data']['alexandria-media']['payment']) {
