@@ -57,7 +57,6 @@ function loadArtifactView2(objMeta) {
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
 
-// var day_avg = false;
 var delay = 5000;
 var keepHash;
 var mainFile;
@@ -952,15 +951,6 @@ function makePaymentToAddress(address, minAmt, sugAmt, done) {
     return USDToBTC(sugAmt);
 }
 
-/*
-function getUSDdayAvg() {
-    $.ajax({
-        url: "https://api.bitcoinaverage.com/ticker/global/USD/"
-    }).done(function (usddata) {
-        day_avg = usddata['24h_avg'];
-    });
-}
-*/
 var paymentTimeout;
 var restartWebSocket = true;
 var recievedPartial = false;
