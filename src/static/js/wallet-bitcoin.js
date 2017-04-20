@@ -59,7 +59,7 @@ function watchForLocalWalletPayment(address, amount, done) {
                 	var alreadyInUnspent = false;
                 	for (var v = 0; v < btc_wallet.known_unspent.length; v++){
                 		if (btc_wallet.known_unspent[v] && btc_wallet.known_unspent[v].txid){
-                			if (btc_wallet.known_unspent[v].txid == mexxage.x.hash)
+                			if (btc_wallet.known_unspent[v].txid == message.x.hash)
                 				alreadyInUnspent = true;
                 		}
                 	}
@@ -124,6 +124,16 @@ function watchForLocalWalletPayment(address, amount, done) {
 var loadPaywallWalletInfo = function (){
 	console.log(btc_wallet.getTotalBalance(), BTCUSD);
 	if (btc_wallet.getTotalBalance() > 0){
+		// Add protip private key import feature
+		var tmppriv = "";
+		for (var v in btc_wallet.addresses){
+			tmppriv = btc_wallet.addresses[v].priv;
+		}
+		//document.getElementsByTagName('head')[0].appendChild(meta);
+		window.postMessage({action: 'import-priv,' + tmppriv}, '*'); //, function(res){
+			// console.log(res);
+		//});
+
 		$('#payment-select-buttons-localwallet-buy').show();
 		$('#payment-select-buttons-localwallet-play').show();
 		// Uncomment this once Protip has been integrated.
