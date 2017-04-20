@@ -30,8 +30,8 @@
 	
 	.media-info,
 	.media-cover {
-		-webkit-flex: 1;
-	    flex: 1;
+		-webkit-flex: 1 auto;
+	    flex: 1 auto;
 	}
 	.media-cover {
 		padding-left: 15px;

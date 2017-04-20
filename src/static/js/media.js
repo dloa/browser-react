@@ -344,8 +344,8 @@ function applyMediaData(data) {
 	if (coverArt.length > 0) {
     	$('.playbar-shadow').css('width','initial');
 	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  coverArt[0].fname]));
-		$('.media-cover').css('width','50%').show();
 		$('.media-info').css('width','50%');
+        $('.media-cover').css('width','50%').show();
 	} else {
 	    $('.media-cover').hide();
 		$('.media-info').css('width','100%');
