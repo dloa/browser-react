@@ -45,8 +45,6 @@ function loadArtifactView2(objMeta) {
         }
     }
 
-	console.info(thisMediaData);
-
     if (thisMediaData[0]['media-data']['alexandria-media']['payment']) {
         if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
             priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
@@ -59,7 +57,7 @@ function loadArtifactView2(objMeta) {
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
 
-var day_avg = false;
+// var day_avg = false;
 var delay = 5000;
 var keepHash;
 var mainFile;
@@ -70,7 +68,6 @@ var artifactLoaded = false;
 var posterFrame = '';
 
 window.doMountMediaBrowser = function (el, data) {
-    console.log (el, data);
     $('.media-cover img').attr('src','');
     $('.jp-type-single').hide();
     return mountMediaBrowser(el, data);
@@ -275,7 +272,6 @@ function applyMediaData(data) {
 		});
 	}
 	console.info(xinfo['files']);
-	console.log (priceScale);
 	// Fix prices where some are missing
 	xinfo['files'].forEach( function (file) {
         if ((file.sugPlay) || (file.minPlay)) {
@@ -354,8 +350,6 @@ function applyMediaData(data) {
 	    $('.media-cover').hide();
 		$('.media-info').css('width','100%');
 	}
-
-	console.info (xinfo['files']);
 
     renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'), media['type'], $('.playlist-extra-files'));
 
@@ -509,7 +503,6 @@ function showPaymentOption(e) {
 }
 
 function mountMediaBrowser(el, data) {
-	console.log(data);
 	try {
 		var crshTst = data[0];
 	} catch (e) {
@@ -521,7 +514,7 @@ function mountMediaBrowser(el, data) {
 	var data = data[0]['media-data'];
     $(el).html($('#media-template').html());
     var mediaData = applyMediaData(data);
-    getUSDdayAvg();
+    getCryptos();
     var artifactType = mediaData['type'];
 
     if ( (artifactType === 'video') || (artifactType === 'movie') || (artifactType === 'music') ) {
@@ -749,15 +742,15 @@ function embedFile(mediaType, fileHash, mediaFilename, posterFrame) {
 }
 
 function USDTouBTC (amount) {
-    return (1000000*Number(amount)/day_avg).toString().substring(0, 16)
+    return (1000000*Number(amount)/BTCUSD).toString().substring(0, 16)
 }
 
 function USDToBTC (amount) {
-    return Math.round((Number(amount)/day_avg).toString().substring(0, 16)*100000000)/100000000
+    return Math.round((Number(amount)/BTCUSD).toString().substring(0, 16)*100000000)/100000000
 }
 
 function BTCtoUSD (amount) {
-    return Math.round((Number(amount)*day_avg).toString().substring(0, 16)*100)/100
+    return Math.round((Number(amount)*BTCUSD).toString().substring(0, 16)*100)/100
 }
 
 function loadTrack (name, url, fname) {
@@ -959,6 +952,7 @@ function makePaymentToAddress(address, minAmt, sugAmt, done) {
     return USDToBTC(sugAmt);
 }
 
+/*
 function getUSDdayAvg() {
     $.ajax({
         url: "https://api.bitcoinaverage.com/ticker/global/USD/"
@@ -966,7 +960,7 @@ function getUSDdayAvg() {
         day_avg = usddata['24h_avg'];
     });
 }
-
+*/
 var paymentTimeout;
 var restartWebSocket = true;
 var recievedPartial = false;

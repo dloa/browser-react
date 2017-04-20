@@ -12,17 +12,13 @@ function makeHistory(stateObj, newTitle) {
 		}
 	}
 	$('#viewlabel').children().hide();
-	console.log('Make History!');
 	var newUrl = document.location.origin + document.location.pathname ? document.location.pathname : '';
-	console.log(stateObj);
 
 	// Default newUrl start.
 	if (document.location.origin == 'https://alexandria.io')
 			newUrl = document.location.origin + '/browser/';
 		else
 			newUrl = document.location.origin + '/';
-
-	console.log("1" + newUrl);
 
 	var newBreadcrumbs = '';
 
@@ -33,7 +29,6 @@ function makeHistory(stateObj, newTitle) {
 			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
 			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
 			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + stateObj.module);
-			console.log("2" + newUrl);
 		}
 		// if there is not a subView
 		if (!stateObj.subView) {
@@ -49,7 +44,6 @@ function makeHistory(stateObj, newTitle) {
 			if (!stateObj.directToMedia)
 				newUrl = newUrl + stateObj.currentView;
 
-			console.log("3" + newUrl);
 		}
 	}
 	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes[0]) && (stateObj.mediaTypes.length > 0) ) {
@@ -62,7 +56,6 @@ function makeHistory(stateObj, newTitle) {
 		}
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
 		newUrl = newUrl + '/' + urlString;
-		console.log("4" + newUrl);
 	}
 
 	// If there is a search term
@@ -94,7 +87,6 @@ function makeHistory(stateObj, newTitle) {
 			else // there is a trailing /
 				newUrl = newUrl + '/' + stateObj.subView.substring(0,6);
 
-			console.log("5" + newUrl);
 		}
 	} else if (stateObj.currentView.slice(0,3) == 'add') {		
 		newBreadcrumbArray = stateObj.currentView.split('-');
@@ -104,7 +96,6 @@ function makeHistory(stateObj, newTitle) {
 		}
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
 		newUrl = newUrl + '/' + stateObj.currentView;
-		console.log("6" + newUrl);		
 	}
 	if (stateObj.directToMedia){
 		var last6 = document.location.pathname.substring(document.location.pathname.length-6, document.location.pathname.length);
@@ -129,7 +120,6 @@ function makeHistory(stateObj, newTitle) {
 	}
 	if ( (newBreadcrumbs == '') && (stateObj.currentView != 'front') ) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
-		console.log(newBreadcrumbs);
 	}
 	if (!isEmbed) {
 		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
@@ -137,7 +127,6 @@ function makeHistory(stateObj, newTitle) {
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
 	document.title = newTitle;
-	console.log("7" + newUrl);
 	console.info(stateObj);
 	history.pushState(stateObj, newTitle, newUrl);
 }

@@ -33,14 +33,10 @@ route('/wallet', 'wallet', function () { });
 
 var el = null;  
 
-function router (event, goUrl) {
-	console.log(isEmbed);
-	console.log(location);
-    
+function router (event, goUrl) {    
     // Current URL
     var url = location.pathname || '/';
 	var paths = url.split('/');
-	console.log(paths);
 
 	var removeInd = -1;
 	for (var i = 0; i < paths.length; i++){
