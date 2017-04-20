@@ -340,9 +340,10 @@ function applyMediaData(data) {
             $('.ri-btc-address').html(data);
         });
     }
-	if (xinfo.coverArt) {
+    var coverArt = getObjects(xinfo['files'], 'type', 'coverArt');
+	if (coverArt.length > 0) {
     	$('.playbar-shadow').css('width','initial');
-	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
+	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  coverArt[0].fname]));
 		$('.media-cover').css('width','50%').show();
 		$('.media-info').css('width','50%');
 	} else {
