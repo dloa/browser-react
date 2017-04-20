@@ -603,6 +603,9 @@ function resetInterface() {
 	// Reset Interface
     togglePWYWOverlay(false);
     togglePlaybarShadow(true);
+    $('.media-cover img').attr('src', '');
+	$('.media-info').css('width','auto');
+    $('.media-cover').css('width','auto').hide();
 	$('#native-player').remove();
 	$('.jp-title').html('');
 	$('#audio-player').jPlayer('destroy');
