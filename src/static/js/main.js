@@ -601,16 +601,7 @@ function loadAlexandria() {
 // RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
-    togglePWYWOverlay(false);
-    togglePlaybarShadow(true);
-    $('.media-cover img').attr('src', '');
-	$('.media-info').css('width','auto');
-    $('.media-cover').css('width','auto').hide();
-	$('#native-player').remove();
-	$('.jp-title').html('');
-	$('#audio-player').jPlayer('destroy');
-	$('#embedded-file').html('');
-	$('#tip-comment').val('');
+	cleanView();
 	if (!isEmbed) {
 		$('#viewlabel').css('display', 'none');
 		$('#disabler').css('display', 'none');
@@ -623,48 +614,19 @@ function resetInterface() {
 	}	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
 	$('#browse-media-wrap .row').remove();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
-	resetTipModal();
-	$('#share-modal').css({
-		left:'initial',
-		right:'initial'
-	}).hide();
-	$('#tip-modal').css({
-		'left':'initial',
-		'right':'initial'
-	}).hide();
 	$('#browse-media-wrap #results-count-wrap.container').hide();
     clearTimeout (window.liveRefresh);
-	clearTimeout(pingTimerId);
 }
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
-    togglePWYWOverlay(false);
-    togglePlaybarShadow(true);
-	$('#native-player').remove();
-	$('#audio-player').jPlayer('destroy');
-	$('#playbar-container').show();
+	cleanView();
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
 	hideOverlay();
 	$('#browse-media-wrap .row').remove();
 	document.getElementById('search').style.display = 'block';
-	$('#share-modal').css({
-			left:'initial',
-			right:'initial'
-		}).hide();
-	resetTipModal();
-    if (paymentTimeout) {
-        clearTimeout (paymentTimeout)
-    }	
-	clearTimeout(pingTimerId);
-	$('#tip-modal').css({
-			'left':'initial',
-			'right':'initial'
-		}).hide();
 	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
@@ -676,12 +638,39 @@ function resetAlexandria() {
 	window.scrollTo(0,0);
 }
 
+function cleanView() {
+    togglePWYWOverlay(false);
+    togglePlaybarShadow(true);
+    $('.media-cover img').attr('src', '');
+	$('.media-info').css('width','auto');
+    $('.media-cover').css('width','auto').hide();
+    $('#footer-notice').remove();
+	$('#native-player').remove();
+	$('.jp-title').html('');
+	$('#audio-player').jPlayer('destroy');
+	$('#embedded-file').html('');
+	$('#tip-modal').css({
+			'left':'initial',
+			'right':'initial'
+		}).hide();
+	$('#share-modal').css({
+			left:'initial',
+			right:'initial'
+		}).hide();
+	resetTipModal();
+	clearTimeout(pingTimerId);
+    if (paymentTimeout) {
+        clearTimeout (paymentTimeout)
+    }	
+}
+
 // RESET TIP MODAL
 function resetTipModal() {
 	$('.ri-publisher').text('');
 	$('.ri-btc-address').text('');
 	$('#tipAdd-FLO').html('');
 	$('#tipAdd-BTC').html('');
+	$('#tip-comment').val('');
 }
 
 // CLEAR MODAL

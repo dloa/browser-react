@@ -53,7 +53,12 @@ function loadArtifactView2(objMeta) {
         }
     }
     console.log (mediaID, thisMediaData);
-	$('.media-cover').hide();
+    var artifactTimestamp = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
+    if ( ( (artifactTimestamp.toString().length === 10) && (artifactTimestamp <= 1462162572) ) || ( (artifactTimestamp.toString().length === 13) && (artifactTimestamp <= 1462162572000) ) ) {
+        var obsoluteArtifactDate = new Date(1462162572000).toString().split(' ');
+        var displayObsDate = obsoluteArtifactDate[1] + ' ' + obsoluteArtifactDate[2] + ' ' + obsoluteArtifactDate[3];
+        $('#app-footer').prepend('<div id="footer-notice">Notice: Some artifacts published before ' + displayObsDate + ' may not be accessible.</div>');
+    }
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
 
@@ -240,10 +245,8 @@ function applyMediaData(data) {
     if (!xinfo['files']) {
     	xinfo['files'] = [];
 		var i = 0;
-	    console.log(media.type);
 	    console.info(tracks);
 		tracks.forEach( function (file) {
-			console.info(file);
 			xinfo['files'][i] = {
 				fname: file,
 				runtime: xinfo['runtime'],
@@ -253,10 +256,6 @@ function applyMediaData(data) {
 				sugPlay: 0,
 				type: media.type
 			}
-//		Account for old payment details
-//			if (payment) {
-//				xinfo['files'][i]['type'] = payment['type'];
-//			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
 				xinfo['files'][i]['sugBuy'] = parseFloat(pwywArray[0])/100;
@@ -340,10 +339,11 @@ function applyMediaData(data) {
             $('.ri-btc-address').html(data);
         });
     }
-    var coverArt = getObjects(xinfo['files'], 'type', 'coverArt');
+    var coverArt = (xinfo.coverArt) ? (xinfo.coverArt) : getObjects(xinfo['files'], 'type', 'coverArt') ;
 	if (coverArt.length > 0) {
+        coverArt = (typeof coverArt === 'string') ? (IPFSUrl ([ipfsAddr,  coverArt])) : (IPFSUrl ([ipfsAddr,  coverArt[0].fname]));
     	$('.playbar-shadow').css('width','initial');
-	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  coverArt[0].fname]));
+	    $('.media-cover img').attr('src', coverArt);
 		$('.media-info').css('width','50%');
         $('.media-cover').css('width','50%').show();
 	} else {
@@ -412,8 +412,6 @@ function showPaymentOption(e) {
         var sugPrice;
         var actionElement;
         var action;
-
-        console.log(fileData);
 
         // Try to load in balance for local btc wallet
         try {
@@ -612,10 +610,11 @@ function mountMediaBrowser(el, data) {
     	            console.error('got jplayer error', e)
     	        }
     	    })
-       	} else if ( (filetype == 'mov') || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
+       	} else if ( (filetype == 'mov') || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') || (filetype == 'none') ) {
 			$('#audio-player').hide();
 			$('#playbar-container').hide();
 		} else {
+            console.log(filetype);
             // Handle Artifact Types that don't use the built-in media player
     		$('.jp-title').text('Unsupported File Format');
 
@@ -756,7 +755,6 @@ function BTCtoUSD (amount) {
 function loadTrack (name, url, fname) {
     filetype = filetype.toLowerCase();
 	fname = encodeURI(fname).replace('+', '%20');
-	console.info(url + fname);
 	var posterurl = url;
 	if (posterFrame == 'alexandria-default-posterframe.png') {
 		posterurl = IPFSHost+'/ipfs/QmQhoySfbL9j4jbDRSsZaeu3DACVBYW1o9vgs8aZAc5bLP/';
@@ -863,7 +861,6 @@ function onPaymentDone (action, file) {
     if (!fileType) {
     	fileType = history.state.mediaType;
     }
-    console.log(fileType);
 	var fileName = file.track.fname;
 	var trackPath = file.url.slice(0, '-'+ encodeURI(fileName).length);
     if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {

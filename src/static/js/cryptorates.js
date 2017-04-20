@@ -7,19 +7,20 @@ var cryptoTimerId = 0;
 
 // TIMER FOR CHANGING EXCHANGE RATES
 function changeCryptoRates() {
-	if (cryptoTimerRunning === 1) {
+	if (cryptoTimerRunning === false) {
 		return false;
 	} else {
 		// set a timer and run search if done typing
-		cryptoTimerRunning = 1;
+		cryptoTimerRunning = true;
 		cryptoTimerId = setTimeout ( 'getCryptos()', 1000 );
 	}
 }
 
 // GET CRYPTO EXCHANGE RATES
 function getCryptos() {
+	console.log("checking crypto prices");
 	clearTimeout ( cryptoTimerId );
-	cryptoTimerRunning = 0;
+	cryptoTimerRunning = false;
 	if (!FLOUSD) {
 		// Alexandria Crytpo Price
 		$.ajax({
@@ -40,7 +41,7 @@ function getCryptos() {
 	} else {
 		adjDisplayValues(FLOUSD, false)
 	}
-	if (!BTCUSD) {
+	if ( (!BTCUSD) && (location.hostname != 'localhost') ) {
 		// Bitcoin
 		$.ajax({
 		    url: 'https://api.bitcoinaverage.com/ticker/global/USD/',
@@ -49,6 +50,10 @@ function getCryptos() {
 				BTCUSD = parseFloat(e['24h_avg']);
 				console.log(BTCUSD);
 				adjDisplayValues(false, BTCUSD);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.error(xhr.status);
+				console.error(thrownError);
 			}
 		});
 	} else {

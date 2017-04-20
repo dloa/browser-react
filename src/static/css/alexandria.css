@@ -1608,17 +1608,17 @@ li[name=pwyw-flo] {
 .appOnly {
 	display: none;
 }
-#contact-tab, #app-footer {
+#contact-tab, #app-footer, #footer-notice {
 	font-size: 0.875rem;
 	z-index: 500;
 	line-height: 1.4;
 }
-#contact-tab, #app-footer, #footer {
+#contact-tab, #app-footer, #footer, #footer-notice {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
-#app-footer, #footer {
+#app-footer, #footer, #footer-notice {
 	width: 100%;
 }
 #app-footer {
@@ -1626,7 +1626,7 @@ li[name=pwyw-flo] {
 	bottom: 0;
 	left: 0;
 }
-#contact-tab {
+#contact-tab, #footer-notice {
 	padding: 5px 15px;
 }
 #footer {
@@ -1642,6 +1642,10 @@ li[name=pwyw-flo] {
 	border-bottom: 0 none transparent;
 	border-radius: 5px 0 0 0;
 	text-align: right;
+}
+#footer-notice {
+	background-color: #c7e5fb;
+	z-index: 400;
 }
 #footer {
 	background: #797979;
