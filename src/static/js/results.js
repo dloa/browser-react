@@ -38,7 +38,6 @@ function filterMediaByType(obj, resetSearch) {
 		$('#browse-media .module-links a.active').removeClass('active');
 		var stateObj = {
 			currentView: 'media',
-//			searchResults: filteredMedia,
 			front: true
 		}
 		makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
@@ -246,16 +245,32 @@ function populateSearchResults(results, module) {
 			var mediaRuntime = 0;
 			var mediaArtist = '';
 			if(mediaInfo['extra-info']){
+				// Get total duration for artifact
 				if (mediaInfo['extra-info']['runtime']) {
-					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+					mediaRuntime = mediaInfo['extra-info']['runtime'];
 				} else if (mediaInfo['extra-info']['files']) {
-					try {
-						mediaRuntime = calcRuntime(mediaInfo['extra-info']['files'][0]['duration']);
-					} catch (e) {
-						mediaRuntime = 0;
+					if (mediaInfo['extra-info']['files'].length === 1) {
+						mediaRuntime = mediaInfo['extra-info']['files'][0]['duration'];
+					} else {
+						for (var f = mediaInfo['extra-info']['files'].length - 1; f >= 0; f--) {
+							if (mediaInfo['extra-info']['files'][f]['duration']) {
+								mediaRuntime += mediaInfo['extra-info']['files'][f]['duration'];
+							} else {
+								mediaRuntime += 0;
+							}
+						}
 					}
 				}
-				if(mediaInfo['extra-info']['artist']){
+				if (mediaRuntime != 0) {
+					mediaRuntime = calcRuntime(mediaRuntime);
+				}
+				if ( (mediaRuntime != 0) && (mediaRuntime != '00:00:undefined') ) {
+					mediaRuntime = ' &bull; '+ mediaRuntime.split('.')[0];
+				} else {
+					mediaRuntime = '';
+				}
+				// Get artist name
+				if (mediaInfo['extra-info']['artist']){
 					mediaArtist = mediaInfo['extra-info']['artist'];
 				}
 				/* LOAD ARTIFACT PREVIEW IMAGE - NOT IMPLEMENTED BECAUSE IT FORCED DOWNLOAD OF ~ 100 MB
@@ -264,11 +279,6 @@ function populateSearchResults(results, module) {
 				} else if (mediaInfo['extra-info']['preview']) {
 					mediaThumb = '<img src="'+IPFSHost+'/ipfs/'+mediaHash +'/'+mediaInfo['extra-info']['preview']+'" />';
 				}*/
-			}
-			if ( (mediaRuntime != 0) && (mediaRuntime != '00:00:undefined') ) {
-				mediaRuntime = ' &bull; '+mediaRuntime.split('.')[0];
-			} else {
-				mediaRuntime = '';
 			}
 			var thisHasCost = '';
 			var sugCost = '';
