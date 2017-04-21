@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    $("#audio-player").bind($.jPlayer.event.ended, function (event) {
+        // done playing
+        $('.playlist-tracks tr.active').next('tr').children(':first').click();
+    });
+});
+
 // v0.6 LOAD ARTIFACT VIEW
 var priceScale = 1;
 
@@ -432,12 +439,12 @@ function showPaymentOption(e) {
 		}
 
 		// Preform checks on payment edge cases
-		if ((price === 0 || price === undefined || price == NaN) && sugPrice !== 0){
+		if ((price === 0 || price === undefined || price === NaN) && sugPrice !== 0){
 			console.log(price + " " + sugPrice);
 			price = sugPrice;
 		}
 
-        if (price === 0 || price === undefined || price == NaN){
+        if (price === 0 || price === undefined || price === NaN){
             onPaymentDone(action, fileData);
             return;
         }
@@ -768,6 +775,7 @@ function loadTrack (name, url, fname) {
     }
     $('#audio-player').show();
     $('#playbar-container').show(); 
+
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
@@ -820,6 +828,16 @@ function loadTrack (name, url, fname) {
 			console.log (filetype);
 	        $('#embedded-file').append('<audio id="native-player" controls="controls"><source src="'+ url + fname +'" /></audio>');
 		}
+        // Start playing if this is not the first file clicked on
+        if (artifactLoaded === false) {
+            artifactLoaded = true;
+        } else {
+            document.getElementById('native-player').play();
+        }
+        $("#native-player").bind('ended', function(){
+            // done playing
+            $('.playlist-tracks tr.active').next('tr').children(':first').click();
+        });
 	}
 }
 
