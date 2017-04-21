@@ -1,6 +1,6 @@
 {
   "name": "browser-react",
-  "version": "0.7.0",
+  "version": "0.7.12",
   "description": "A react version of the browser that allows SSR out of the box along with faster loading times.",
   "main": "index.js",
   "scripts": {
