@@ -12,11 +12,6 @@ if (location.protocol == 'app:') {
 	$('#publish-module-link').removeAttr('onclick').attr('href','http://alexandria.io/publisher/');
 }
 
-if (isEmbed) {
-	console.log('is Embed!');
-	$('body').addClass('isEmbed');
-}
-
 var prevTipAmount = '';
 var fadeTimer = 100;
 var connectingTimerId = 0;
@@ -764,30 +759,6 @@ function replaceSVG() {
 	});
 }
 
-/* SPINNER
-	if (!isEmbed) {
-		var largeSpinConfig = {
-		lines: 17, // The number of lines to draw
-		length: 7, // The length of each line
-		width: 1, // The line thickness
-		radius: 10, // The radius of the inner circle
-		corners: 1, // Corner roundness (0..1)
-		rotate: 0, // The rotation offset
-		direction: 1, // 1: clockwise, -1: counterclockwise
-		color: '#000', // #rgb or #rrggbb or array of colors
-		speed: .5, // Rounds per second
-		trail: 34, // Afterglow percentage
-		shadow: false, // Whether to render a shadow
-		hwaccel: false, // Whether to use hardware acceleration
-		className: 'spinner', // The CSS class to assign to the spinner
-		zIndex: 2e9, // The z-index (defaults to 2000000000)
-		top: '50%', // Top position relative to parent
-		left: '50%' // Left position relative to parent
-	};
-	var target = document.getElementById('wait');
-	var spinner = new Spinner(largeSpinConfig).spin(target);
-}
-*/
 // DEFAULT BROWSER FONT SIZE
 document.emSize=function(pa){
 	pa= pa || document.body;

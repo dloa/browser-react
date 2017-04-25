@@ -214,6 +214,9 @@ body {
     box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
 }
 
+body.embedded {
+    padding-top: 0;
+}
 .media-info h2, .media-info h3 {
     text-align: left;
     line-height: 1.6;

@@ -509,6 +509,9 @@ main {
 	-webkit-overflow-scrolling: touch;
 	font-size: .9em;
 }
+body.embedded main {
+	top: 0;
+}
 /* FRONT VIEW */
 div#intro {
 	display: none;
@@ -1704,6 +1707,9 @@ li[name=pwyw-flo] {
 	-moz-box-shadow:inset 0 0 140px rgba(0, 0, 0, .2);
 	z-index: 2;
 	background-color: #ffffff;
+}
+body.embedded #app-shading {
+	top: 0;
 }
 #app-overlay {
 	display: none;

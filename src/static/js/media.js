@@ -698,8 +698,9 @@ function mountMediaBrowser(el, data) {
         $(this).addClass('active')
     })
 
-//	Embed code temporarily disabled until rewritten for new routing
-//	displayEmbedCode(mediaID, mediaData.type, true);
+    if (!isEmbed) {
+		displayEmbedCode(mediaID, mediaData.type);
+	}
 
 	window.scroll(0,0);
 
@@ -712,17 +713,19 @@ function mountMediaBrowser(el, data) {
 		$('.playlist-tracks tr:first').children(':first').click();
 	}
 
-	// MAKE HISTORY ARTIFACT VIEW
-	var stateObj = {
-		currentView: 'artifact',
-		searchResults: false,
-		subView: mediaID,
-		artifactTitle: mediaData.info.title,
-		mediaType: mediaData.type,
-		artifactPublisher: mediaPublisher,
-		publisherId: mediaData.publisher
+	if (!isEmbed) {
+		// MAKE HISTORY ARTIFACT VIEW
+		var stateObj = {
+			currentView: 'artifact',
+			searchResults: false,
+			subView: mediaID,
+			artifactTitle: mediaData.info.title,
+			mediaType: mediaData.type,
+			artifactPublisher: mediaPublisher,
+			publisherId: mediaData.publisher
+		}
+		makeHistory(stateObj, stateObj.artifactTitle + ' | ΛLΞXΛNDRIΛ');
 	}
-	makeHistory(stateObj, stateObj.artifactTitle + ' | ΛLΞXΛNDRIΛ');
 }
 
 // EMBED ARTIFACT FROM DHT
@@ -1072,15 +1075,9 @@ function setQR(address, amount) {
 }
 
 // IFRAME EMBED CODE
-function displayEmbedCode (mediaID, mediaType, isNew) {
+function displayEmbedCode (mediaID, mediaType) {
 
-    if ( isNew != true ) {
-        // Use old embed html for old artifacts
-        embedUrl = window.location.origin + window.location.pathname + 'embed.html#' + mediaID;
-    } else {
-        // Use new embed html for new artifacts
-        embedUrl = window.location.origin + window.location.pathname + 'artifact.html#' + mediaID;
-    }
+    embedUrl = window.location.origin + window.location.pathname.slice(0, -1 * window.location.pathname.split('/')[window.location.pathname.split('/').length -1].length) + 'embed/' + mediaID;
 
     var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
     $('.iframecode').text(iframeEmbedCode);

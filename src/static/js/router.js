@@ -287,8 +287,23 @@ function router (event, goUrl) {
 
 // Check if this is an embedded artifact
 var isEmbed = false;
-if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'embed.html') || (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'artifact.html') ) {
+if ($('body').hasClass('embedded')) {
 	isEmbed = true;
+    // Embed what
+    var url = location.pathname || '/';
+	var paths = url.split('/');
+	var searchOn = paths[2].replace("-","_");
+	var module = paths[1] ? paths[1] : '/';
+
+	var moduleSlice = module.length -1;
+	if ( module.slice(0, -moduleSlice) == 'F') {
+		searchResults = searchAPI('publisher', 'address', searchOn);
+		searchOn = searchResults[0]['publisher-data']['alexandria-publisher']['address'];
+		loadPublisherView(searchOn);
+	} else {
+		// We can just pass in the txid and it will look it up from there.
+		loadArtifactView2(searchOn);
+	}
 } else {
 	// Listen on hash change:
 	window.addEventListener('onpopstate', router);  

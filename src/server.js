@@ -84,6 +84,35 @@ app.get('*', function(req, res) {
 					
 					return res.send(container);
 				});
+			} else if (req.params[0].includes('/embed/')){
+				urlHash = req.params[0].replace('/embed/', '');
+				console.log("Embed: " + urlHash);
+				LDD.getArtifact(urlHash, function(data){
+					if (!data[0]){
+						return res.render('index', { metaseo: '', markup: markup });
+					}
+
+					var artifact = '';
+
+					// alexandria-media
+					if (data[0]['media-data'])
+						artifact = data[0]['media-data']['alexandria-media'];
+					else //OIP
+						artifact = data[0]['oip-041'].artifact;
+
+					// Check for multiple txns with matching search string
+					if ( (data.length > 1) && (urlHash.length === 6)) {
+						for (var tx = 0; tx < data.length; tx++) {
+							if (data[tx].txid.slice(0,6) != data.slice(1,-1)) {
+								data.splice(data[tx], 1);
+							}
+						}
+					}
+
+					metaseo = seo.generateTags(data[0], 'http://' + req.headers.host + req.url, req.headers.host);
+
+					return res.render('embed', { metaseo: metaseo, markup: markup });
+				});
 			} else {
 
 				LDD.getArtifact(urlHash, function(data){
