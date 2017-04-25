@@ -661,7 +661,8 @@ function cleanView() {
 	clearTimeout(pingTimerId);
     if (paymentTimeout) {
         clearTimeout (paymentTimeout)
-    }	
+    }
+    $('.row.embedcode').hide();
 }
 
 // RESET TIP MODAL

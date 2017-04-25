@@ -698,7 +698,8 @@ function mountMediaBrowser(el, data) {
         $(this).addClass('active')
     })
 
-	displayEmbedCode(mediaID, mediaData.type, true);
+//	Embed code temporarily disabled until rewritten for new routing
+//	displayEmbedCode(mediaID, mediaData.type, true);
 
 	window.scroll(0,0);
 
@@ -1083,4 +1084,5 @@ function displayEmbedCode (mediaID, mediaType, isNew) {
 
     var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
     $('.iframecode').text(iframeEmbedCode);
+    $('.row.embedcode').show();
 }
