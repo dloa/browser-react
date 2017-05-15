@@ -39,7 +39,7 @@ function loadTipModal(obj) {
 		// GENERATE QR CODE FOR BTC TIPS
 		tipAmount = $('input[name="tip-amount"]:checked').val()/BTCUSD;
 		tipAmount = Math.round(tipAmount*100000000)/100000000;
-		tipCurrency = 'bitcion';
+		tipCurrency = 'bitcoin';
 		generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, tipCurrency, tipAmount, dname);
 		if (document.getElementById('sendBTCTipBtn')) {
 			document.getElementById('sendBTCTipBtn').setAttribute('onclick','sendTip(this, BTCclient, "' + mediaBTC + '", "BTC")');
