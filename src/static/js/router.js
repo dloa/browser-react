@@ -161,7 +161,7 @@ function router (event, goUrl) {
 					makeHistory(stateObj, titleStr);
 					populateSearchResults(searchResults, route.templateId);
 				} else {
-					var searchOn = paths[2].replace("-","_");
+					var searchOn = ( paths[2] === 'embed' ? paths[1].replace("-","_") : paths[2].replace("-","_") );
 					if (searchOn.length == 6 || searchOn.length == 64) {
 
 		    			var moduleSlice = module.length -1;
@@ -292,7 +292,7 @@ if ($('body').hasClass('embedded')) {
     // Embed what
     var url = location.pathname || '/';
 	var paths = url.split('/');
-	var searchOn = paths[2].replace("-","_");
+	var searchOn = paths[paths.length-1].replace("-","_");
 	var module = paths[1] ? paths[1] : '/';
 
 	var moduleSlice = module.length -1;
