@@ -743,10 +743,8 @@ function embedFile(mediaType, fileHash, mediaFilename, posterFrame) {
          embedCode = '<object data="' + IPFSHost +'/ipfs/'+ fileHash + '/' + mediaFilename + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="' + IPFSHost +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
     } else if ( (mediaType == 'thing') && (fileExt != 'htm') ) {
          embedCode = '<img src="' + IPFSHost +'/ipfs/'+fileHash+ '/' + mediaFilename +'" class="large-poster" />';
-    } else if (fileExt == 'htm') {
-        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'/'+mediaFilename+'" type="text/html" width="100%" height="620px" />';
     } else {
-        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
+        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'/'+mediaFilename+'" type="text/html" width="100%" height="620px" />';
     }
     $('#embedded-file').html(embedCode).show();
 }

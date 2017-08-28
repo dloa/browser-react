@@ -9,7 +9,7 @@ if (location.protocol == 'app:') {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
 	var wallet;
-	$('#publish-module-link').removeAttr('onclick').attr('href','http://alexandria.io/publisher/');
+	$('#publish-module-link').removeAttr('onclick').attr('href','http://www.alexandria.io/publisher-offline');
 }
 
 var prevTipAmount = '';
@@ -175,23 +175,23 @@ jQuery(document).ready(function($){
 				$('#serverID').text('Local');
 			} else {
 				librarianHost = 'https://api.alexandria.io'
-				IPFSHost = 'https://ipfs.alexandria.io';
+				IPFSHost = 'https://gateway.ipfs.io';
 				$('#serverID').text('Gateway');
 			}
 			resetAlexandria();
 		});
 	} else {
-		if (IPFSHost == 'https://ipfs.alexandria.io') {
+		if (IPFSHost == 'https://gateway.ipfs.io') {
 			$('#IPFS-switch').html('<strong>IPFS</strong> Use Local');
 		} else {
 			$('#IPFS-switch').html('<strong>IPFS</strong> Use Gateway');
 		}
 		$('#IPFS-switch').click(function(){
-			if(IPFSHost == 'https://ipfs.alexandria.io'){
+			if(IPFSHost == 'https://gateway.ipfs.io'){
 				IPFSHost = 'http://localhost:8080';
 				$('#IPFS-switch').html('<strong>IPFS</strong> Use Gateway');
 			} else {
-				IPFSHost = 'https://ipfs.alexandria.io';
+				IPFSHost = 'https://gateway.ipfs.io';
 				$('#IPFS-switch').html('<strong>IPFS</strong> Use Local');
 			}
 			resetAlexandria();

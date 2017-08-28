@@ -76,9 +76,9 @@ app.get('*', function(req, res) {
 						}
 						playerEmbed += '<p style="margin:0; font-size:18px">'+artifact.info['extra-info']['artist']+'</p>';
 						playerEmbed += '</div>';
-						playerEmbed += '<audio class="audio" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
+						playerEmbed += '<audio class="audio" width="100%" controls><source src="https://gateway.ipfs.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="audio/mpeg">Your browser does not support audio</audio>'
 					} else {
-						playerEmbed += '<video class="video" width="100%" controls><source src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
+						playerEmbed += '<video class="video" width="100%" controls><source src="https://gateway.ipfs.io/ipfs/' + artifact.torrent + '/' + artifact.info['extra-info'].filename + '" type="video/mp4">Your browser does not support video</video>'
 					}
 					var container = '<!DOCTYPE html><html><body style="margin: 0px; font-family: Arial,Helvetica Neue,Helvetica,sans-serif;"><style type="text/css"> audio, video { width:100%; height:auto; padding: 0 4px 0; box-sizing: border-box; }</style><div class="'+artifact.type+'">'+playerEmbed+'</div></body></html>';
 					

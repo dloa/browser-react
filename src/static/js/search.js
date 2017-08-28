@@ -47,13 +47,33 @@ window.oipDowngrade = function(oipObject){
 	// Pull out of casing
 	var oip = oipObject["oip-041"];
 
+	var type = "";
+
+	if (oip.artifact.type.includes("-")){
+		if (oip.artifact.type.includes("Video"))
+			type = "video";
+		if (oip.artifact.type.includes("Audio"))
+			type = "music";
+		if (oip.artifact.type.includes("Image"))
+			type = "thing";
+		if (oip.artifact.type.includes("Text"))
+			type = "book";
+		if (oip.artifact.type.includes("Software"))
+			type = "thing";
+		if (oip.artifact.type.includes("Web"))
+			type = "thing";
+	}
+
+	if (type === "")
+		type = oip.artifact.type;
+
 	var alexandriaObject = {  
 		"media-data":{  
 			"alexandria-media":{  
 				"torrent": oip.artifact.storage.location,
 				"publisher": oip.artifact.publisher,
 				"timestamp": oip.artifact.timestamp*1000,
-				"type": oip.artifact.type,
+				"type": type,
 				"info":{  
 					"title": oip.artifact.info.title,
 					"description":oip.artifact.info.description,
@@ -83,6 +103,8 @@ window.oipDowngrade = function(oipObject){
 	// Add files.
 	if (oip.artifact.storage.files){
 		var files = oip.artifact.storage.files;
+		var hasVideo = false;
+		var hasAudio = false;
 		for (var i = 0; i < files.length; i++) {
 			if (files[i].filename && !files[i].fname){
 				files[i].fname = files[i].filename;
@@ -91,6 +113,37 @@ window.oipDowngrade = function(oipObject){
 			if (files[i].displayname && !files[i].dname){
 				files[i].dname = files[i].displayname;
 				delete files[i].displayname;
+			}
+			if (files[i].type){
+				if (files[i].type === "Video") {
+					hasVideo = true;
+					files[i].type = files[i].type.toLowerCase();
+				} else if (files[i].type === "Audio"){
+					hasAudio = true;
+					files[i].type = "music"
+				} else if (hasVideo && files[i].type === "Image"){
+					files[i].type = "preview"
+				} else if (hasAudio && files[i].type === "Image"){
+                                        files[i].type = "coverArt"
+                                } else {
+					var type = files[i].type;
+					
+        			        if (type.includes("Video"))
+        		                	type = "video";
+	  		                if (type.includes("Audio"))
+		  		                type = "music";
+		  		        if (type.includes("Image"))
+  		                                type = "thing";
+  		                        if (type.includes("Text"))
+  		                                type = "book";
+  		                        if (type.includes("Software"))
+  		                                type = "thing";
+  		                        if (type.includes("Web"))
+                       		                type = "thing";
+
+        		            	files[i].type = type;
+
+				}
 			}
 		}
 
