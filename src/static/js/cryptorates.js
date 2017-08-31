@@ -44,10 +44,10 @@ function getCryptos() {
 	if ( (!BTCUSD) && (location.hostname != 'localhost') ) {
 		// Bitcoin
 		$.ajax({
-		    url: 'https://api.bitcoinaverage.com/ticker/global/USD/',
+		    url: 'https://api.coinmarketcap.com/v1/ticker/bitcoin/',
 		    success: function(e) {
 				console.info(e);
-				BTCUSD = parseFloat(e['24h_avg']);
+				BTCUSD = parseFloat(e[0]['price_usd']);
 				console.log(BTCUSD);
 				adjDisplayValues(false, BTCUSD);
 			},
