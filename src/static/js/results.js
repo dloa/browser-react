@@ -149,7 +149,7 @@ function deDupeResults(filteredMedia) {
 				0: deDupeHash,
 				1: artifactData,
 				2: txid,
-				3: filteredMedia[i]['publisher-name']
+				3: filteredMedia[i]['publisherName']
 			}
 			results.length ++;
 		} else {
@@ -159,7 +159,7 @@ function deDupeResults(filteredMedia) {
 					0: deDupeHash,
 					1: artifactData,
 					2: txid,
-					3: filteredMedia[i]['publisher-name']
+					3: filteredMedia[i]['publisherName']
 				}
 				results.length ++;
 			} else {
