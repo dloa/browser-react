@@ -67,7 +67,7 @@ app.get('*', function(req, res) {
 					var playerEmbed = '';
 					if (artifact.type == 'music') {
 						var coverArt = getObjects(artifact.info['extra-info']['files'], 'type', 'coverArt');
-						playerEmbed += '<img src="https://ipfs.alexandria.io/ipfs/' + artifact.torrent + '/'+coverArt[0].fname+'" style="float:left; margin: 4px;" width=150 height=150 />';
+						playerEmbed += '<img src="https://gateway.ipfs.io/ipfs/' + artifact.torrent + '/'+coverArt[0].fname+'" style="float:left; margin: 4px;" width=150 height=150 />';
 						playerEmbed += '<div style="padding: 4px; line-height: 1.4">';
 						if (artifact.info['extra-info'].files[0]['dname'] != '') {
 							playerEmbed += '<h1 style="font-size:20px;margin: 0;">'+artifact.info['extra-info'].files[0]['dname']+'</h1><h2 style="font-size:18px; font-weight: normal; margin: 0;">'+artifact.info['title']+'</h2>';
@@ -155,13 +155,33 @@ function conformOIP(oipObject){
 	// Pull out of casing
 	var oip = oipObject["oip-041"];
 
+	var mtype = "";
+
+        if (oip.artifact.type.includes("-")){
+                if (oip.artifact.type.includes("Video"))
+                        mtype = "video";
+                if (oip.artifact.type.includes("Audio"))
+                        mtype = "music";
+                if (oip.artifact.type.includes("Image"))
+                        mtype = "thing";
+                if (oip.artifact.type.includes("Text"))
+                        mtype = "book";
+                if (oip.artifact.type.includes("Software"))
+                        mtype = "thing";
+                if (oip.artifact.type.includes("Web"))
+                        mtype = "thing";
+        }
+
+        if (mtype === "")
+                mtype = oip.artifact.type;
+
 	var alexandriaObject = {  
 		"media-data":{  
 			"alexandria-media":{  
 				"torrent": oip.artifact.storage.location,
 				"publisher": oip.artifact.publisher,
 				"timestamp": oip.artifact.timestamp*1000,
-				"type": oip.artifact.type,
+				"type": mtype,
 				"info": {  
 					"title": oip.artifact.info.title,
 					"description":oip.artifact.info.description,
@@ -191,6 +211,8 @@ function conformOIP(oipObject){
 	// Add files.
 	if (oip.artifact.storage.files){
 		var files = oip.artifact.storage.files;
+		var hasVideo = false;
+		var hasAudio = false;
 		for (var i = 0; i < files.length; i++) {
 			if (files[i].filename && !files[i].fname){
 				files[i].fname = files[i].filename;
@@ -200,6 +222,38 @@ function conformOIP(oipObject){
 				files[i].dname = files[i].displayname;
 				delete files[i].displayname;
 			}
+
+			if (files[i].type){
+                                if (files[i].type === "Video") {
+                                        hasVideo = true;
+                                        files[i].type = files[i].type.toLowerCase();
+                                } else if (files[i].type === "Audio"){
+                                        hasAudio = true;
+                                        files[i].type = "music"
+                                } else if (hasVideo && files[i].type === "Image"){
+                                        files[i].type = "preview"
+                                } else if (hasAudio && files[i].type === "Image"){
+                                        files[i].type = "coverArt"
+                                } else {
+                                        var type = files[i].type;
+
+                                        if (type.includes("Video"))
+                                                type = "video";
+                                        if (type.includes("Audio"))
+                                                type = "music";
+                                        if (type.includes("Image"))
+                                                type = "thing";
+                                        if (type.includes("Text"))
+                                                type = "book";
+                                        if (type.includes("Software"))
+                                                type = "thing";
+                                        if (type.includes("Web"))
+                                                type = "thing";
+
+                                        files[i].type = type;
+
+                                }
+                        }
 		}
 
 		alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"].files = [];

@@ -144,12 +144,13 @@ function deDupeResults(filteredMedia) {
 		var txid = filteredMedia[i]['txid'];
 		var artifactData = parseArtifactData(filteredMedia[i]);
 		var deDupeHash = new String(artifactData['info']['title']+'_'+artifactData['publisher']).hashCode();
+
 		if (results.length === 0) {
 			results[results.length] = {
 				0: deDupeHash,
 				1: artifactData,
 				2: txid,
-				3: filteredMedia[i]['publisherName']
+				3: filteredMedia[i]['publisher-name']
 			}
 			results.length ++;
 		} else {
@@ -159,7 +160,7 @@ function deDupeResults(filteredMedia) {
 					0: deDupeHash,
 					1: artifactData,
 					2: txid,
-					3: filteredMedia[i]['publisherName']
+					3: filteredMedia[i]['publisher-name']
 				}
 				results.length ++;
 			} else {
@@ -228,6 +229,7 @@ function populateSearchResults(results, module) {
 			}
 			var mediaID = results[i][2];
 			var mediaPublisher = results[i][3];
+
 			var publisherID = results[i][1]['publisher'];
 			var mediaHash = results[i][1]['torrent'];
 			var mediaInfo = results[i][1]['info'];

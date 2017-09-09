@@ -85,7 +85,8 @@ window.oipDowngrade = function(oipObject){
 			"signature":oip.signature
 		},
 		"txid": oipObject.txid,
-		"block": oipObject.block
+		"block": oipObject.block,
+		"publisher-name": oipObject.publisherName
 	}
 
 	alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"]["DHT Hash"] = oip.artifact.storage.location;
