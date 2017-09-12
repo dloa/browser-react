@@ -155,7 +155,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
     		          tdBuy +
     		          "</tr>");
     		var trackEl = extraFiles.children().last();
-    		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
+    		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'],file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
     	} else {
             var fileRuntime = file.runtime;
             if (!file.runtime) {
@@ -169,7 +169,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
     		          tdBuy +
     		          "</tr>");
     		var trackEl = el.children().last();
-    		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
+    		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'],file.fname]), sugPlay: file.sugPlay/priceScale, minPlay: file.minPlay/priceScale, sugBuy: file.sugBuy/priceScale, minBuy: file.minBuy/priceScale});
     	}
     });
     if (extraFiles.children().length < 1) {
@@ -404,7 +404,13 @@ function watchForPin (addr, filename) {
 }
 
 function IPFSUrl (components) {
-    return encodeURI (IPFSHost + '/ipfs/' + components.join ('/'));
+    var tmpComponents = [];
+    for (var i in components)
+	tmpComponents[i] = encodeURIComponent(components[i]);
+
+    console.log(tmpComponents);
+
+    return IPFSHost + '/ipfs/' + tmpComponents.join ('/');
 }
 
 function showPaymentOption(e) {
@@ -739,6 +745,9 @@ function embedFile(mediaType, fileHash, mediaFilename, posterFrame) {
     if (mediaFilename == 'none') {
          mediaFilename = '';
     }
+
+    mediaFilename = encodeURIComponent(mediaFilename);
+
     if (mediaType == 'book') {
          embedCode = '<object data="' + IPFSHost +'/ipfs/'+ fileHash + '/' + mediaFilename + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="' + IPFSHost +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
     } else if ( (mediaType == 'thing') && (fileExt != 'htm') ) {
@@ -763,11 +772,13 @@ function BTCtoUSD (amount) {
 
 function loadTrack (name, url, fname) {
     filetype = filetype.toLowerCase();
-	fname = encodeURI(fname).replace('+', '%20');
+	fname = encodeURIComponent(fname).replace('+', '%20');
 	var posterurl = url;
 	if (posterFrame == 'alexandria-default-posterframe.png') {
 		posterurl = IPFSHost+'/ipfs/QmQhoySfbL9j4jbDRSsZaeu3DACVBYW1o9vgs8aZAc5bLP/';
 	}
+
+	posterFrame = encodeURIComponent(posterFrame);
 	if (fname == 'none') {
 		$('#audio-player').hide();
         if( $('#native-player') ) {
@@ -875,14 +886,13 @@ function onPaymentDone (action, file) {
 
 	console.info(file);
 
-    var trackPath = file.url.slice(0, '-'+ encodeURI(file.track.fname).length);
-
     var fileType = file.track.type;
     if (!fileType) {
     	fileType = history.state.mediaType;
     }
 	var fileName = file.track.fname;
-	var trackPath = file.url.slice(0, '-'+ encodeURI(fileName).length);
+	var trackPath = file.url.slice(0, file.url.replace(encodeURIComponent(fileName), '').length);
+
     if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
 	    var res = loadTrack(file.track.dname, trackPath, fileName);
 
