@@ -7,7 +7,23 @@
  *
  * Created by Someguy123 (http://someguy123.com)
  * Modified by bitspill
+ * Modified by daviortega - server-side
  */
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM(`<!DOCTYPE html>`);
+const $ = require('jquery')(window);
+
+let Bitcoin = require ('./SimpleDeps.js')
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
+
+let CryptoJS = require('crypto-js')
+
 var flovaultBaseURL = "https://flovault.alexandria.io";
 var florinsightBaseURL = "https://florinsight.alexandria.io";
 
@@ -16,6 +32,9 @@ var Wallet = (function () {
         this.addresses = {};
         this.balances = {};
         this.coin_network = Bitcoin.networks.florincoin;
+        console.log('here')
+        console.log(Bitcoin)
+        console.log(typeof Bitcoin)
         this.CryptoConfig = {
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Iso10126,
